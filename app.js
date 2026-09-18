@@ -255,3 +255,40 @@ async function checkUrlForDirectVerify() {
         `;
     }
 }
+
+// Export IndexedDB database to a downloadable JSON backup file
+async function exportDatabase() {
+    const students = await getAllStudentsFromDB();
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(students, null, 2));
+    const downloadAnchor = document.createElement('a');
+    downloadAnchor.setAttribute("href", dataStr);
+    downloadAnchor.setAttribute("download", `TerraHub_DB_Backup_${new Date().toISOString().split('T')[0]}.json`);
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    downloadAnchor.remove();
+}
+
+// Import JSON backup back into IndexedDB
+async function importDatabase(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async function(e) {
+        try {
+            const records = JSON.parse(e.target.result);
+            if (!Array.isArray(records)) {
+                alert("Invalid backup file format.");
+                return;
+            }
+            for (const record of records) {
+                if (record.token) await saveStudentToDB(record);
+            }
+            await refreshDatabaseTable();
+            alert("Database successfully restored!");
+        } catch (err) {
+            alert("Error importing file: " + err.message);
+        }
+    };
+    reader.readAsText(file);
+}

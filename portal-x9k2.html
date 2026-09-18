@@ -92,7 +92,15 @@
             </div>
 
             <div class="admin-card" style="max-width: 100%; flex: 100%;">
-                <h3 style="color: var(--brand-purple); font-size: 0.95rem; font-weight: 800;">Student Records Database</h3>
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
+                    <h3 style="color: var(--brand-purple); font-size: 0.95rem; font-weight: 800; margin: 0;">Student Records Database</h3>
+                    <div style="display: flex; gap: 6px;">
+                        <button class="btn" style="padding: 6px 10px; font-size: 0.7rem; width: auto; background: var(--brand-gold); color: #000;" onclick="exportDatabase()">📥 Backup DB</button>
+                        <button class="btn" style="padding: 6px 10px; font-size: 0.7rem; width: auto; background: #333;" onclick="document.getElementById('importFile').click()">📤 Restore DB</button>
+                        <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importDatabase(event)">
+                    </div>
+                </div>
+
                 <div style="overflow-x: auto;">
                     <table class="records-table">
                         <thead>
@@ -114,7 +122,6 @@
 
     </div>
 
-    <!-- Configuration & Script Injection -->
     <script src="config.js"></script>
     <script src="app.js"></script>
 </body>
