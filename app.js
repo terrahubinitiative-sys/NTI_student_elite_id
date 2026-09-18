@@ -308,3 +308,34 @@ async function checkUrlForDirectVerify() {
         `;
     }
 }
+
+// Reliable Mobile QR File Decoding via Canvas + jsQR
+function handleQrFileUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.drawImage(img, 0, 0, img.width, img.height);
+
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const code = jsQR(imageData.data, imageData.width, imageData.height, {
+                inversionAttempts: "dontInvert",
+            });
+
+            if (code && code.data) {
+                window.location.href = code.data;
+            } else {
+                alert("REJECTED: Could not detect valid QR code on uploaded image. Please ensure the QR code is clearly visible.");
+            }
+        };
+        img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+}
