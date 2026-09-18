@@ -39,6 +39,7 @@ async function getAllStudentsFromDB() {
         const tx = db.transaction(STORE_NAME, "readonly");
         const req = tx.objectStore(STORE_NAME).getAll();
         req.onsuccess = () => resolve(req.result || []);
+        req.onerror = () => resolve([]);
     });
 }
 
@@ -67,7 +68,6 @@ window.addEventListener('DOMContentLoaded', async () => {
 async function loginAdmin() {
     const inputVal = document.getElementById('adminPassInput').value.trim();
     
-    // Hash input using Web Crypto API
     const buffer = new TextEncoder().encode(inputVal);
     const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
     const inputHash = Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
@@ -202,6 +202,59 @@ async function removeRecord(token) {
     }
 }
 
+// Mobile-friendly Backup Export via Blob URL
+async function exportDatabase() {
+    try {
+        const students = await getAllStudentsFromDB();
+        if (students.length === 0) {
+            alert("Database is currently empty. No records to export.");
+            return;
+        }
+
+        const jsonString = JSON.stringify(students, null, 2);
+        const blob = new Blob([jsonString], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `TerraHub_DB_Backup_${new Date().toISOString().split('T')[0]}.json`;
+        document.body.appendChild(a);
+        a.click();
+        
+        setTimeout(() => {
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }, 100);
+    } catch (err) {
+        alert("Backup Export Error: " + err.message);
+    }
+}
+
+// Import Backup JSON file back into IndexedDB
+async function importDatabase(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async function(e) {
+        try {
+            const records = JSON.parse(e.target.result);
+            if (!Array.isArray(records)) {
+                alert("Invalid backup file format.");
+                return;
+            }
+            for (const record of records) {
+                if (record.token) await saveStudentToDB(record);
+            }
+            await refreshDatabaseTable();
+            alert(`Success: Restored ${records.length} records into the database!`);
+        } catch (err) {
+            alert("Import Error: " + err.message);
+        }
+    };
+    reader.readAsText(file);
+}
+
 function startScanner() {
     html5QrCode = new Html5Qrcode("reader");
     html5QrCode.start(
@@ -254,41 +307,4 @@ async function checkUrlForDirectVerify() {
             </div>
         `;
     }
-}
-
-// Export IndexedDB database to a downloadable JSON backup file
-async function exportDatabase() {
-    const students = await getAllStudentsFromDB();
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(students, null, 2));
-    const downloadAnchor = document.createElement('a');
-    downloadAnchor.setAttribute("href", dataStr);
-    downloadAnchor.setAttribute("download", `TerraHub_DB_Backup_${new Date().toISOString().split('T')[0]}.json`);
-    document.body.appendChild(downloadAnchor);
-    downloadAnchor.click();
-    downloadAnchor.remove();
-}
-
-// Import JSON backup back into IndexedDB
-async function importDatabase(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = async function(e) {
-        try {
-            const records = JSON.parse(e.target.result);
-            if (!Array.isArray(records)) {
-                alert("Invalid backup file format.");
-                return;
-            }
-            for (const record of records) {
-                if (record.token) await saveStudentToDB(record);
-            }
-            await refreshDatabaseTable();
-            alert("Database successfully restored!");
-        } catch (err) {
-            alert("Error importing file: " + err.message);
-        }
-    };
-    reader.readAsText(file);
 }
