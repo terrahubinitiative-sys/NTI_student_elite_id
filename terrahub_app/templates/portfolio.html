@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ student.full_name }} - Portfolio & Certificate</title>
+    <style>
+        :root {
+            --bg-deep: #0b0714;
+            --card-bg: #160d26;
+            --accent-gold: #f39c12;
+            --accent-blue: #3498db;
+            --text-main: #f5f6fa;
+            --text-muted: #bdc3c7;
+            --border-color: #2c1e4a;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-deep); color: var(--text-main); padding: 20px; line-height: 1.6; }
+        
+        .container { max-width: 650px; margin: 0 auto; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 10px; padding: 25px; box-shadow: 0 8px 30px rgba(0,0,0,0.7); }
+        
+        .profile-header { display: flex; align-items: center; gap: 20px; border-bottom: 2px solid var(--accent-blue); padding-bottom: 20px; margin-bottom: 20px; flex-wrap: wrap; }
+        .profile-img { width: 100px; height: 100px; border-radius: 50%; border: 2px solid var(--accent-blue); object-fit: cover; }
+        .profile-title h1 { font-size: 1.6rem; color: var(--accent-blue); margin-bottom: 4px; letter-spacing: 0.5px; }
+        .profile-title p { font-size: 0.9rem; color: var(--text-muted); }
+
+        .meta-info { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px; display: grid; grid-template-columns: 1fr; gap: 6px; }
+        .meta-info span { display: inline-block; margin-right: 15px; }
+
+        .section-title { font-size: 1.1rem; color: var(--accent-blue); border-bottom: 1px solid var(--border-color); padding-bottom: 5px; margin: 20px 0 10px 0; text-transform: uppercase; letter-spacing: 1px; }
+        .content-block { font-size: 0.95rem; color: var(--text-muted); font-family: 'Times New Roman', Times, serif; margin-bottom: 15px; white-space: pre-line; }
+
+        .cert-section { margin-top: 40px; border-top: 2px dashed var(--accent-gold); padding-top: 30px; text-align: center; }
+        
+        .certificate-card {
+            background: #fff;
+            color: #111;
+            padding: 40px 30px;
+            border-radius: 4px;
+            border: 10px solid #1a103c;
+            position: relative;
+            text-align: center;
+            max-width: 600px;
+            margin: 20px auto;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+        .cert-header { font-size: 1.4rem; font-weight: bold; color: #1a103c; text-transform: uppercase; font-family: 'Times New Roman', Times, serif; }
+        .cert-sub { font-size: 0.75rem; color: #555; letter-spacing: 1px; margin-bottom: 25px; }
+        .cert-title { font-size: 1.5rem; color: #d4ac0d; font-family: Georgia, serif; font-style: italic; margin: 15px 0; }
+        .cert-recipient { font-size: 1.8rem; font-weight: bold; color: #1a103c; border-bottom: 2px solid #1a103c; display: inline-block; padding: 0 20px 5px 20px; margin: 10px 0 20px 0; }
+        .cert-body { font-size: 0.9rem; color: #333; line-height: 1.5; font-family: 'Times New Roman', Times, serif; margin-bottom: 30px; }
+        
+        .cert-footer-grid { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 20px; font-size: 0.8rem; }
+        .signature-line { border-top: 1px solid #333; width: 140px; padding-top: 5px; text-align: center; font-weight: bold; color: #222; }
+        .qr-code-box img { width: 90px; height: 90px; }
+
+        .btn-group { display: flex; gap: 10px; justify-content: center; margin-top: 20px; }
+        .action-btn { background: var(--accent-gold); color: var(--bg-deep); border: none; padding: 10px 20px; border-radius: 5px; font-weight: bold; cursor: pointer; text-decoration: none; font-size: 0.9rem; }
+        .action-btn:hover { opacity: 0.9; }
+        .back-link { display: inline-block; margin-bottom: 20px; color: var(--accent-blue); text-decoration: none; font-size: 0.9rem; }
+        .back-link:hover { text-decoration: underline; }
+
+        @media print {
+            body { background: #fff; color: #000; padding: 0; }
+            .container, .back-link, .btn-group, header, footer { display: none !important; }
+            .certificate-card { box-shadow: none; border: 5px solid #1a103c; margin: 0; width: 100%; max-width: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div style="max-width: 650px; margin: 0 auto;">
+        <a href="/" class="back-link">← Back to Main Portal</a>
+    </div>
+
+    <div class="container">
+        <div class="profile-header">
+            {% if student.photo_filename %}
+                <img src="/uploads/{{ student.photo_filename }}" alt="{{ student.full_name }}" class="profile-img">
+            {% else %}
+                <img src="https://via.placeholder.com/100" alt="Placeholder" class="profile-img">
+            {% endif %}
+            <div class="profile-title">
+                <h1>{{ student.full_name }}</h1>
+                <p>{{ student.professional_title }}</p>
+            </div>
+        </div>
+
+        <div class="meta-info">
+            <div><span>📍 Location: {{ student.location }}</span> <span>✉️ Email: {{ student.email }}</span></div>
+            <div><span>💻 GitHub: {{ student.github }}</span> <span>🕒 Timezone: {{ student.timezone }}</span></div>
+        </div>
+
+        {% if student.executive_pitch %}
+        <div class="section-title">Core Executive Pitch</div>
+        <div class="content-block">{{ student.executive_pitch }}</div>
+        {% endif %}
+
+        {% if student.technical_capabilities %}
+        <div class="section-title">Core Technical Capabilities</div>
+        <div class="content-block">{{ student.technical_capabilities }}</div>
+        {% endif %}
+
+        {% if student.key_projects %}
+        <div class="section-title">Key Technical Projects</div>
+        <div class="content-block">{{ student.key_projects }}</div>
+        {% endif %}
+
+        {% if student.education %}
+        <div class="section-title">Academic Background</div>
+        <div class="content-block">{{ student.education }}</div>
+        {% endif %}
+
+        {% if student.community_arch %}
+        <div class="section-title">Community Architecture</div>
+        <div class="content-block">{{ student.community_arch }}</div>
+        {% endif %}
+
+        <div class="cert-section">
+            <h3 style="color: var(--accent-gold); margin-bottom: 15px;">Verified Institutional Credential</h3>
+            
+            <div class="certificate-card" id="certificateToPrint">
+                <div class="cert-header">Navakholo Terrahub Initiative</div>
+                <div class="cert-sub">From Ground to Greatness • Secure Database Verified</div>
+                
+                <div class="cert-title">Certificate of Completion</div>
+                <div style="font-size: 0.85rem; color: #555;">This is proudly presented to</div>
+                <div class="cert-recipient">{{ student.full_name }}</div>
+                
+                <div class="cert-body">
+                    {{ student.short_message or "For successfully completing the rigorous program requirements in " + student.course_name + " covering practical technical modules and projects." }}
+                    <br><strong>Period: {{ student.start_date }} - {{ student.grad_date }}</strong>
+                </div>
+
+                <div class="cert-footer-grid">
+                    <div style="text-align: left;">
+                        <div class="signature-line">{{ student.founder_name or "Director / Founder" }}</div>
+                        <div style="font-size: 0.7rem; color: #666; margin-top: 3px;">Navakholo Terrahub</div>
+                    </div>
+                    
+                    <div class="qr-code-box">
+                        <img src="data:image/png;base64,{{ qr_b64 }}" alt="QR Verification">
+                        <div style="font-size: 0.65rem; color: #441; margin-top: 2px;">ID: {{ student.cert_id }}</div>
+                    </div>
+
+                    <div style="text-align: right;">
+                        <div style="font-weight: bold; color: #222;">Date: {{ student.issue_date }}</div>
+                        <div style="font-size: 0.7rem; color: #666; margin-top: 3px;">Issue Date</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button onclick="window.print()" class="action-btn">Download / Print PDF</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

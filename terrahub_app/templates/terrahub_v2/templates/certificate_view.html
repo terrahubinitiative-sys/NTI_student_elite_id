@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate - {{ record.institution }}</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        body {
+            background-color: #070913;
+            color: #f8fafc;
+            font-family: 'Times New Roman', Times, serif;
+            margin: 0;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .top-nav {
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        .btn-action {
+            background: #38bdf8;
+            color: #000;
+            border: none;
+            padding: 8px 14px;
+            font-family: 'Times New Roman', Times, serif;
+            font-weight: bold;
+            font-size: 10pt;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+            text-align: center;
+            flex: 1;
+        }
+        .btn-action:hover { opacity: 0.85; }
+
+        /* Official Certificate Canvas Layout */
+        .certificate-sheet {
+            background: #ffffff;
+            color: #111827;
+            width: 100%;
+            max-width: 800px;
+            aspect-ratio: 1.414 / 1;
+            padding: 40px 50px;
+            box-sizing: border-box;
+            border: 8px solid #0f172a;
+            outline: 2px solid #b45309;
+            outline-offset: -6px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .header-section {
+            text-align: center;
+        }
+        .institution-title {
+            font-size: 18pt;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #0f172a;
+            margin: 0;
+        }
+        .institution-subtitle {
+            font-size: 9pt;
+            letter-spacing: 1.5px;
+            color: #475569;
+            text-transform: uppercase;
+            margin-top: 4px;
+            margin-bottom: 15px;
+        }
+        .cert-title {
+            font-size: 20pt;
+            font-style: italic;
+            font-weight: bold;
+            color: #b45309;
+            margin: 5px 0;
+        }
+
+        .body-section {
+            text-align: center;
+            margin: 10px 0;
+        }
+        .presented-text {
+            font-size: 10pt;
+            font-style: italic;
+            color: #475569;
+            margin-bottom: 8px;
+        }
+        .recipient-name {
+            font-size: 22pt;
+            font-weight: bold;
+            color: #0f172a;
+            border-bottom: 2px solid #0f172a;
+            display: inline-block;
+            padding-bottom: 2px;
+            padding-left: 30px;
+            padding-right: 30px;
+            margin-bottom: 15px;
+        }
+        .completion-text {
+            font-size: 11pt;
+            line-height: 1.6;
+            color: #1e293b;
+            max-width: 640px;
+            margin: 0 auto;
+        }
+        .course-highlight {
+            font-weight: bold;
+            color: #0f172a;
+        }
+
+        .footer-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            border-top: 1px solid #cbd5e1;
+            padding-top: 12px;
+        }
+        .signature-box {
+            text-align: center;
+            width: 210px;
+        }
+        .signature-line {
+            border-top: 1px solid #0f172a;
+            margin-bottom: 3px;
+            padding-top: 3px;
+            font-size: 9.5pt;
+            font-weight: bold;
+            color: #0f172a;
+        }
+        .signature-title {
+            font-size: 7.5pt;
+            color: #64748b;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .qr-container {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .qr-container img {
+            width: 75px;
+            height: 75px;
+            border: 2px solid #0f172a;
+            padding: 3px;
+            background: #fff;
+        }
+        .verify-code {
+            font-size: 8pt;
+            font-family: monospace;
+            color: #0f172a;
+            font-weight: bold;
+            margin-top: 3px;
+            letter-spacing: 1px;
+        }
+
+        @media print {
+            body { background: none; padding: 0; }
+            .top-nav { display: none; }
+            .certificate-sheet { box-shadow: none; width: 100%; height: 100vh; border: 4px solid #000; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-nav">
+        <a href="/portal" class="btn-action" style="background: #38bdf8;">&larr; Portal</a>
+        <button onclick="window.print()" class="btn-action" style="background: #f59e0b; color: #000;">Download PDF</button>
+        <button onclick="downloadImage()" class="btn-action" style="background: #10b981; color: #fff;">Download Image</button>
+    </div>
+
+    <div class="certificate-sheet" id="certCard">
+        <div class="header-section">
+            <h1 class="institution-title">{{ record.institution }}</h1>
+            <div class="institution-subtitle">From Ground to Greatness &bull; Secure Database Verified</div>
+            <div class="cert-title">Certificate of Completion</div>
+        </div>
+
+        <div class="body-section">
+            <div class="presented-text">THIS IS PROUDLY PRESENTED TO</div>
+            <div>
+                <span class="recipient-name">{{ record.full_name }}</span>
+            </div>
+            <div class="completion-text">
+                For successfully completing program requirements in <span class="course-highlight">{{ record.course_name }}</span> for the period of <strong>{{ record.date_joined }}</strong> to <strong>{{ record.date_graduated }}</strong>.
+            </div>
+        </div>
+
+        <div class="footer-section">
+            <div class="signature-box">
+                <div class="signature-line">{{ record.issuer_name }}</div>
+                <div class="signature-title">DIRECTOR / ISSUER</div>
+            </div>
+
+            <div class="qr-container">
+                <!-- Using reliable QR Server API with explicit crossOrigin attribute enabled for canvas rendering -->
+                <img id="qrImg" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=http://127.0.0.1:5000/verify/{{ record_id }}" alt="QR Verification" crossorigin="anonymous">
+                <div class="verify-code">{{ record.code }}</div>
+            </div>
+
+            <div class="signature-box">
+                <div class="signature-line">Ezra Wanyama</div>
+                <div class="signature-title">FOUNDER & DIRECTOR</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function downloadImage() {
+            // Ensure html2canvas captures external cross-origin images properly
+            html2canvas(document.querySelector("#certCard"), { 
+                scale: 3,
+                useCORS: true,
+                allowTaint: true
+            }).then(canvas => {
+                let link = document.createElement('a');
+                link.download = 'Certificate-{{ record_id }}.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
+    </script>
+
+</body>
+</html>

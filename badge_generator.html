@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Navakholo TerraHub - Badge Generator</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    :root {
+      --bg-dark: #0f172a;
+      --card-bg: #1e293b;
+      --text-light: #f8fafc;
+      --accent-blue: #0284c7;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-light);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 15px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    header h1 {
+      font-size: 1.4rem;
+      color: #38bdf8;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    header p {
+      font-size: 0.85rem;
+      color: #94a3b8;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .form-card {
+      background: var(--card-bg);
+      padding: 16px;
+      border-radius: 12px;
+      border: 1px solid #334155;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #cbd5e1;
+      text-transform: uppercase;
+    }
+
+    input, select {
+      background: #0f172a;
+      border: 1px solid #475569;
+      color: #fff;
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--accent-blue);
+    }
+
+    .preview-area {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      background: #090d16;
+      border-radius: 12px;
+      border: 1px dashed #334155;
+    }
+
+    .badge {
+      width: 340px;
+      height: 485px;
+      background: #ffffff;
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      color: #1e293b;
+    }
+
+    .badge-header {
+      width: 100%;
+      padding: 14px 10px;
+      text-align: center;
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    /* Header Themes matching Metals */
+    .theme-beginner .badge-header { background: linear-gradient(135deg, #b45309, #78350f); }
+    .theme-intermediate .badge-header { background: linear-gradient(135deg, #64748b, #334155); }
+    .theme-pro .badge-header { background: linear-gradient(135deg, #b91c1c, #7c2d12); }
+
+    .avatar-wrapper {
+      margin-top: 18px;
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      border: 4px solid #fff;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      overflow: hidden;
+      background: #e2e8f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .avatar-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .student-name {
+      font-size: 1.25rem;
+      font-weight: 800;
+      margin-top: 12px;
+      color: #0f172a;
+      text-align: center;
+      padding: 0 10px;
+      text-transform: uppercase;
+    }
+
+    .track-name {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #64748b;
+      margin-top: 2px;
+      text-align: center;
+      padding: 0 10px;
+    }
+
+    .level-ribbon {
+      margin-top: 12px;
+      padding: 6px 22px;
+      border-radius: 20px;
+      color: #ffffff;
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .theme-beginner .level-ribbon { background: linear-gradient(90deg, #d97706, #b45309); }
+    .theme-intermediate .level-ribbon { background: linear-gradient(90deg, #94a3b8, #475569); }
+    .theme-pro .level-ribbon { background: linear-gradient(90deg, #eab308, #b91c1c); }
+
+    .stars {
+      margin-top: 6px;
+      font-size: 1.1rem;
+    }
+
+    /* Metal Seal Emblem Section */
+    .metal-seal {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .badge-footer {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      background: #f1f5f9;
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #e2e8f0;
+      font-size: 0.75rem;
+      color: #475569;
+      font-weight: 700;
+    }
+
+    .btn-download {
+      background: #10b981;
+      color: #fff;
+      font-weight: 700;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      width: 100%;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-download:active {
+      transform: scale(0.98);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Navakholo TerraHub</h1>
+    <p>Achievement Badge Production System</p>
+  </header>
+
+  <div class="container">
+    <div class="form-card">
+      <div class="form-group">
+        <label>Student Name</label>
+        <input type="text" id="inputName" value="BRIAN MUTORO" oninput="updateBadge()" />
+      </div>
+
+      <div class="form-group">
+        <label>Track / Course</label>
+        <input type="text" id="inputTrack" value="CYBERSECURITY AWARENESS" oninput="updateBadge()" />
+      </div>
+
+      <div class="form-group">
+        <label>Achievement Level</label>
+        <select id="selectLevel" onchange="updateBadge()">
+          <option value="beginner">Level 1 - Beginner (Bronze/Copper)</option>
+          <option value="intermediate">Level 2 - Intermediate (Silver)</option>
+          <option value="pro" selected>Level 3 - Pro (Gold)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Student Photo</label>
+        <input type="file" id="inputPhoto" accept="image/*" onchange="loadPhoto(event)" />
+      </div>
+    </div>
+
+    <div class="preview-area">
+      <div id="badgeCard" class="badge theme-pro">
+        <div class="badge-header">Navakholo TerraHub Initiative</div>
+        <div class="avatar-wrapper">
+          <img id="avatarImg" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 24 24' fill='%2394a3b8'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>" alt="Student Photo" />
+        </div>
+        <div class="student-name" id="badgeName">BRIAN MUTORO</div>
+        <div class="track-name" id="badgeTrack">CYBERSECURITY AWARENESS</div>
+        
+        <div class="level-ribbon" id="badgeRibbon">LEVEL 3 - PRO</div>
+        <div class="stars" id="badgeStars">⭐⭐⭐</div>
+
+        <!-- Dynamic Metallic Seal Emblem -->
+        <div class="metal-seal" id="sealContainer">
+          <!-- Rendered via JavaScript -->
+        </div>
+
+        <div class="badge-footer">
+          <span>NTI CERTIFIED</span>
+          <span id="badgeDate">SEP 2026</span>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-download" onclick="downloadBadge()">Download Badge PNG</button>
+  </div>
+
+  <script>
+    const seals = {
+      beginner: `
+        <svg width="60" height="60" viewBox="0 0 100 100">
+          <defs>
+            <linearGradient id="bronzeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#FDBA74" />
+              <stop offset="50%" stop-color="#D97706" />
+              <stop offset="100%" stop-color="#78350F" />
+            </linearGradient>
+          </defs>
+          <circle cx="50" cy="50" r="46" fill="url(#bronzeGrad)" stroke="#FED7AA" stroke-width="2" />
+          <circle cx="50" cy="50" r="38" fill="none" stroke="#FFFFFF" stroke-width="1.5" stroke-dasharray="4,2" />
+          <path d="M50 25 L56 38 L70 40 L60 50 L62 64 L50 57 L38 64 L40 50 L30 40 L44 38 Z" fill="#FFF" />
+        </svg>`,
+      intermediate: `
+        <svg width="60" height="60" viewBox="0 0 100 100">
+          <defs>
+            <linearGradient id="silverGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#F1F5F9" />
+              <stop offset="50%" stop-color="#94A3B8" />
+              <stop offset="100%" stop-color="#475569" />
+            </linearGradient>
+          </defs>
+          <circle cx="50" cy="50" r="46" fill="url(#silverGrad)" stroke="#F8FAFC" stroke-width="2" />
+          <circle cx="50" cy="50" r="38" fill="none" stroke="#FFFFFF" stroke-width="1.5" stroke-dasharray="4,2" />
+          <path d="M50 25 L56 38 L70 40 L60 50 L62 64 L50 57 L38 64 L40 50 L30 40 L44 38 Z" fill="#FFF" />
+        </svg>`,
+      pro: `
+        <svg width="60" height="60" viewBox="0 0 100 100">
+          <defs>
+            <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#FEF08A" />
+              <stop offset="30%" stop-color="#EAB308" />
+              <stop offset="70%" stop-color="#CA8A04" />
+              <stop offset="100%" stop-color="#854D0E" />
+            </linearGradient>
+          </defs>
+          <circle cx="50" cy="50" r="46" fill="url(#goldGrad)" stroke="#FEF08A" stroke-width="2" />
+          <circle cx="50" cy="50" r="38" fill="none" stroke="#FFFFFF" stroke-width="1.5" stroke-dasharray="4,2" />
+          <path d="M50 25 L56 38 L70 40 L60 50 L62 64 L50 57 L38 64 L40 50 L30 40 L44 38 Z" fill="url(#goldGrad)" stroke="#FFF" stroke-width="1" />
+        </svg>`
+    };
+
+    function updateBadge() {
+      const name = document.getElementById('inputName').value || 'STUDENT NAME';
+      const track = document.getElementById('inputTrack').value || 'PROGRAM TRACK';
+      const level = document.getElementById('selectLevel').value;
+      const card = document.getElementById('badgeCard');
+
+      document.getElementById('badgeName').innerText = name.toUpperCase();
+      document.getElementById('badgeTrack').innerText = track.toUpperCase();
+
+      card.className = 'badge theme-' + level;
+
+      const ribbon = document.getElementById('badgeRibbon');
+      const stars = document.getElementById('badgeStars');
+      const sealContainer = document.getElementById('sealContainer');
+
+      if (level === 'beginner') {
+        ribbon.innerText = 'LEVEL 1 - BEGINNER';
+        stars.innerText = '🥉';
+        sealContainer.innerHTML = seals.beginner;
+      } else if (level === 'intermediate') {
+        ribbon.innerText = 'LEVEL 2 - INTERMEDIATE';
+        stars.innerText = '🥈';
+        sealContainer.innerHTML = seals.intermediate;
+      } else if (level === 'pro') {
+        ribbon.innerText = 'LEVEL 3 - PRO';
+        stars.innerText = '🥇';
+        sealContainer.innerHTML = seals.pro;
+      }
+    }
+
+    function loadPhoto(event) {
+      const reader = new FileReader();
+      reader.onload = function() {
+        document.getElementById('avatarImg').src = reader.result;
+      };
+      if (event.target.files[0]) {
+        reader.readAsDataURL(event.target.files[0]);
+      }
+    }
+
+    function downloadBadge() {
+      const card = document.getElementById('badgeCard');
+      html2canvas(card, { scale: 3, useCORS: true }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = `NTI-Badge-${document.getElementById('badgeName').innerText}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      });
+    }
+
+    // Initial seal render on page load
+    updateBadge();
+  </script>
+</body>
+</html>

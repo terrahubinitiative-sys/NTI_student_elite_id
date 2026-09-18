@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navakholo Terrahub Initiative - Welcome</title>
+    <style>
+        :root {
+            --bg-deep: #07040d;
+            --card-bg: rgba(18, 10, 30, 0.92);
+            --accent-gold: #f39c12;
+            --text-main: #f5f6fa;
+            --text-muted: #d0d3d4;
+            --border-color: rgba(243, 156, 18, 0.25);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            min-height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Edge-to-Edge Professional Container */
+        .landing-wrapper {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            min-height: 100vh;
+            background: var(--bg-deep);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .landing-card {
+            width: 100%;
+            max-width: 750px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 50px 40px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            animation: fadeInLanding 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes fadeInLanding {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+
+        .logo-container img {
+            width: 130px;
+            height: 130px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid var(--accent-gold);
+            box-shadow: 0 0 25px rgba(243, 156, 18, 0.4);
+        }
+
+        h1 {
+            color: var(--accent-gold);
+            font-size: 2.1rem;
+            margin-bottom: 25px;
+            font-family: 'Times New Roman', Times, serif;
+            letter-spacing: 0.5px;
+        }
+
+        .description-box {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 12pt;
+            line-height: 1.85;
+            color: var(--text-muted);
+            margin-bottom: 35px;
+            text-align: justify;
+        }
+
+        .description-box p {
+            margin-bottom: 18px;
+        }
+
+        .description-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        .btn-explore {
+            display: inline-block;
+            background: linear-gradient(135deg, #f39c12, #d68910);
+            color: var(--bg-deep);
+            padding: 15px 45px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1.15rem;
+            text-decoration: none;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: all 0.25s ease;
+            box-shadow: 0 6px 20px rgba(243, 156, 18, 0.35);
+            letter-spacing: 0.5px;
+        }
+
+        .btn-explore:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(243, 156, 18, 0.55);
+            opacity: 0.95;
+        }
+
+        .btn-explore:active {
+            transform: translateY(0);
+        }
+
+        @media (max-width: 768px) {
+            .landing-card {
+                padding: 30px 20px;
+                border: none;
+                border-radius: 0;
+                background: transparent;
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="landing-wrapper">
+        <div class="landing-card">
+            <div class="logo-container">
+                <img src="{{ url_for('static', filename='Hub.png') }}" alt="Navakholo Terrahub Logo">
+            </div>
+            
+            <h1>Navakholo Terrahub Initiative</h1>
+            
+            <div class="description-box">
+                <p>Navakholo Terrahub Initiative is a pioneering grassroots technology organization committed to bridging the digital divide in rural and underserved communities. By equipping youth and local innovators with next-generation digital skills, professional software engineering training, and decentralized connectivity solutions, we transform untapped potential into sustainable economic empowerment.</p>
+                <p>Our comprehensive ecosystem combines rigorous technical education with tamper-proof credential verification and community-driven projects. Through disciplined mentorship and practical software development, we lay the groundwork from the ground up, ensuring every participant is prepared to build the future of technology.</p>
+            </div>
+
+            <a href="/explore" class="btn-explore">Enter to Explore</a>
+        </div>
+    </div>
+
+</body>
+</html>

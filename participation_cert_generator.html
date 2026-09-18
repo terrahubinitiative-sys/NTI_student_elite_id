@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pro Certificate of Participation - Navakholo TerraHub</title>
+    <!-- Google Fonts for Classic & Signature Look -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Great+Vibes&family=Montserrat:wght@400;600;700&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+    <!-- html2canvas for converting HTML certificate to High-Res PNG -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        :root {
+            --navy-deep: #0f2c59;
+            --gold-accent: #c59b27;
+            --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
+            --bg-canvas: #eef2f5;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-canvas);
+            color: #333;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        h1 {
+            color: var(--navy-deep);
+            margin-bottom: 5px;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+
+        p.subtitle {
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 0.85rem;
+            text-align: center;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            width: 100%;
+            max-width: 1150px;
+            justify-content: center;
+        }
+
+        .form-card {
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            flex: 1;
+            min-width: 300px;
+            max-width: 360px;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: var(--navy-deep);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-family: inherit;
+        }
+
+        .preview-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 2;
+            min-width: 340px;
+            overflow-x: auto;
+        }
+
+        /* Certificate Executive Frame */
+        .certificate {
+            width: 800px;
+            height: 560px;
+            background: #ffffff;
+            padding: 20px;
+            position: relative;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background-image: radial-gradient(circle at center, #ffffff 0%, #f9fbfd 100%);
+        }
+
+        .outer-border {
+            border: 4px solid var(--navy-deep);
+            height: 100%;
+            padding: 8px;
+            position: relative;
+        }
+
+        .inner-border {
+            border: 2px solid var(--gold-accent);
+            height: 100%;
+            padding: 20px 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+
+        /* Geometric Corner Elements */
+        .corner-decoration {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border: 3px solid var(--gold-accent);
+        }
+        .top-left { top: 4px; left: 4px; border-right: none; border-bottom: none; }
+        .top-right { top: 4px; right: 4px; border-left: none; border-bottom: none; }
+        .bottom-left { bottom: 4px; left: 4px; border-right: none; border-top: none; }
+        .bottom-right { bottom: 4px; right: 4px; border-left: none; border-top: none; }
+
+        .org-header {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--navy-deep);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-top: 5px;
+        }
+
+        .cert-main-heading {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.3rem;
+            color: var(--gold-accent);
+            margin-top: 5px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .cert-body {
+            width: 100%;
+            margin: 10px 0;
+        }
+
+        .cert-subtext {
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem;
+            color: #555;
+            font-style: italic;
+        }
+
+        .participant-name {
+            font-family: 'Cinzel', serif;
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--navy-deep);
+            margin: 10px 0 5px 0;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .name-underline {
+            width: 60%;
+            height: 2px;
+            background: var(--gold-gradient);
+            margin: 0 auto 10px auto;
+        }
+
+        .course-banner {
+            background: rgba(15, 44, 89, 0.05);
+            border-left: 3px solid var(--navy-deep);
+            border-right: 3px solid var(--navy-deep);
+            padding: 8px 20px;
+            display: inline-block;
+            margin-top: 8px;
+        }
+
+        .event-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--navy-deep);
+            letter-spacing: 1px;
+        }
+
+        /* Footer, Seal, and Signatures */
+        .cert-footer {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 5px;
+        }
+
+        .signature-block {
+            text-align: center;
+            width: 220px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .sig-handwritten {
+            font-family: 'Great Vibes', cursive;
+            font-size: 1.6rem;
+            color: var(--navy-deep);
+            height: 40px;
+            line-height: 40px;
+            text-transform: capitalize; /* Prevents ugly overlapping when typed in ALL CAPS */
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
+        }
+
+        .signature-line {
+            border-top: 1px solid #777;
+            width: 100%;
+            margin-top: 2px;
+            margin-bottom: 6px;
+        }
+
+        .signature-name {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--navy-deep);
+        }
+
+        .signature-sub {
+            font-size: 0.68rem;
+            color: #666;
+            text-transform: uppercase;
+        }
+
+        /* CSS Gold Emblem Seal */
+        .seal-container {
+            position: relative;
+            width: 85px;
+            height: 85px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .gold-seal {
+            width: 75px;
+            height: 75px;
+            background: var(--gold-gradient);
+            border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            border: 2px dashed #ffffff;
+        }
+
+        .inner-seal {
+            width: 58px;
+            height: 58px;
+            background: var(--navy-deep);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            text-align: center;
+            padding: 2px;
+        }
+
+        .seal-text-top {
+            font-size: 0.45rem;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+            color: #fbf5b7;
+        }
+
+        .seal-star {
+            font-size: 0.7rem;
+            color: #fbf5b7;
+            margin: 1px 0;
+        }
+
+        .cert-id-tag {
+            position: absolute;
+            bottom: 6px;
+            font-size: 0.6rem;
+            color: #888;
+            font-family: monospace;
+            letter-spacing: 1px;
+        }
+
+        .btn-download {
+            margin-top: 20px;
+            background: var(--navy-deep);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(15, 44, 89, 0.25);
+            transition: background 0.2s;
+        }
+
+        .btn-download:hover {
+            background: #1d4ed8;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Executive Participation Certificate</h1>
+    <p class="subtitle">Navakholo TerraHub Initiative — Fixed Layout Edition</p>
+
+    <div class="container">
+        <!-- Input Form -->
+        <div class="form-card">
+            <div class="form-group">
+                <label>Participant Name</label>
+                <input type="text" id="inputName" value="BRIAN MUTORO" oninput="updateCert()">
+            </div>
+            <div class="form-group">
+                <label>Program / Track Title</label>
+                <input type="text" id="inputEvent" value="COMMUNITY DIGITAL LITERACY & CYBER AWARENESS" oninput="updateCert()">
+            </div>
+            <div class="form-group">
+                <label>Date Issued</label>
+                <input type="text" id="inputDate" value="SEPTEMBER 2026" oninput="updateCert()">
+            </div>
+            <div class="form-group">
+                <label>Certificate Record ID</label>
+                <input type="text" id="inputCertID" value="NTHI-PART-2026-001" oninput="updateCert()">
+            </div>
+            <div class="form-group">
+                <label>First Signatory Name (Left)</label>
+                <input type="text" id="inputSig1" value="Ezra Wanyama" oninput="updateCert()">
+            </div>
+            <div class="form-group">
+                <label>First Title (Left)</label>
+                <input type="text" id="inputTitle1" value="LEAD FOUNDER & DIRECTOR" oninput="updateCert()">
+            </div>
+            <div class="form-group">
+                <label>Second Signatory Name (Right)</label>
+                <input type="text" id="inputSig2" value="Program Coordinator" oninput="updateCert()">
+            </div>
+            <div class="form-group">
+                <label>Second Title (Right)</label>
+                <input type="text" id="inputTitle2" value="NAVAKHOLO TERRAHUB" oninput="updateCert()">
+            </div>
+        </div>
+
+        <!-- Certificate Preview -->
+        <div class="preview-section">
+            <div class="certificate" id="printableCert">
+                <div class="outer-border">
+                    <div class="corner-decoration top-left"></div>
+                    <div class="corner-decoration top-right"></div>
+                    <div class="corner-decoration bottom-left"></div>
+                    <div class="corner-decoration bottom-right"></div>
+
+                    <div class="inner-border">
+                        <div>
+                            <div class="org-header">NAVAKHOLO TERRAHUB INITIATIVE</div>
+                            <div class="cert-main-heading">Certificate of Participation</div>
+                        </div>
+
+                        <div class="cert-body">
+                            <p class="cert-subtext">This official certificate is proudly awarded to</p>
+                            <div class="participant-name" id="certName">BRIAN MUTORO</div>
+                            <div class="name-underline"></div>
+                            <p class="cert-subtext">in recognition of successful participation & engagement in</p>
+                            <div class="course-banner">
+                                <div class="event-title" id="certEvent">COMMUNITY DIGITAL LITERACY & CYBER AWARENESS</div>
+                            </div>
+                        </div>
+
+                        <div class="cert-footer">
+                            <!-- Left Signature -->
+                            <div class="signature-block">
+                                <div class="sig-handwritten" id="sigVal1">Ezra Wanyama</div>
+                                <div class="signature-line"></div>
+                                <div class="signature-name" id="certSig1">EZRA WANYAMA</div>
+                                <div class="signature-sub" id="certTitle1">LEAD FOUNDER & DIRECTOR</div>
+                            </div>
+
+                            <!-- Gold Badge Seal -->
+                            <div class="seal-container">
+                                <div class="gold-seal">
+                                    <div class="inner-seal">
+                                        <div class="seal-text-top">OFFICIAL</div>
+                                        <div class="seal-star">★</div>
+                                        <div class="seal-text-top">SEAL</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right Signature -->
+                            <div class="signature-block">
+                                <div class="sig-handwritten" id="sigVal2">Program Coordinator</div>
+                                <div class="signature-line"></div>
+                                <div class="signature-name" id="certSig2">PROGRAM COORDINATOR</div>
+                                <div class="signature-sub" id="certTitle2">NAVAKHOLO TERRAHUB</div>
+                            </div>
+                        </div>
+
+                        <div class="cert-id-tag">
+                            RECORD ID: <span id="certID">NTHI-PART-2026-001</span> | ISSUED: <span id="certDate">SEPTEMBER 2026</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn-download" onclick="downloadCert()">Download Pro Certificate (PNG)</button>
+        </div>
+    </div>
+
+    <script>
+        function updateCert() {
+            document.getElementById('certName').innerText = document.getElementById('inputName').value.toUpperCase();
+            document.getElementById('certEvent').innerText = document.getElementById('inputEvent').value.toUpperCase();
+            document.getElementById('certDate').innerText = document.getElementById('inputDate').value.toUpperCase();
+            document.getElementById('certID').innerText = document.getElementById('inputCertID').value.toUpperCase();
+            
+            // Left Signature
+            let val1 = document.getElementById('inputSig1').value;
+            document.getElementById('sigVal1').innerText = val1;
+            document.getElementById('certSig1').innerText = val1.toUpperCase();
+            document.getElementById('certTitle1').innerText = document.getElementById('inputTitle1').value.toUpperCase();
+
+            // Right Signature
+            let val2 = document.getElementById('inputSig2').value;
+            document.getElementById('sigVal2').innerText = val2;
+            document.getElementById('certSig2').innerText = val2.toUpperCase();
+            document.getElementById('certTitle2').innerText = document.getElementById('inputTitle2').value.toUpperCase();
+        }
+
+        function downloadCert() {
+            let name = document.getElementById('inputName').value.trim() || 'Student';
+            let certElement = document.getElementById('printableCert');
+            
+            html2canvas(certElement, { scale: 3, useCORS: true }).then(canvas => {
+                let link = document.createElement('a');
+                link.download = name.replace(/\s+/g, '_') + '_Pro_Certificate.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
+    </script>
+</body>
+</html>

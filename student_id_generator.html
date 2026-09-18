@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Student ID Generator - The Smartphone Scientist</title>
+    <!-- JsBarcode for Barcode Generation -->
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+    <!-- html2canvas for converting HTML card to PNG image -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        :root {
+            --primary-blue: #0f2c59;
+            --accent-blue: #0077b6;
+            --gold-color: #f7b32b;
+            --bg-color: #f4f7f6;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: #333;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        h1 {
+            color: var(--primary-blue);
+            margin-bottom: 5px;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+
+        p.subtitle {
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            width: 100%;
+            max-width: 900px;
+            justify-content: center;
+        }
+
+        .form-card {
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            flex: 1;
+            min-width: 300px;
+            max-width: 400px;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: var(--primary-blue);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+
+        .preview-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            min-width: 320px;
+        }
+
+        /* ID Card Styles */
+        .id-card {
+            width: 350px;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            overflow: hidden;
+            border: 1px solid #e0e0e0;
+            position: relative;
+        }
+
+        .id-header {
+            background: var(--accent-blue);
+            color: #fff;
+            padding: 12px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .id-header-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .id-header-sub {
+            font-size: 0.65rem;
+            opacity: 0.9;
+        }
+
+        .badge-box {
+            width: 24px;
+            height: 24px;
+            background: var(--gold-color);
+            border-radius: 4px;
+        }
+
+        .id-body {
+            padding: 15px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .photo-frame {
+            width: 90px;
+            height: 115px;
+            border: 2px solid var(--accent-blue);
+            border-radius: 8px;
+            overflow: hidden;
+            background: #eee;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .details {
+            flex-grow: 1;
+        }
+
+        .field-label {
+            font-size: 0.6rem;
+            color: #777;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .field-value {
+            font-size: 0.85rem;
+            color: var(--primary-blue);
+            font-weight: 700;
+            margin-bottom: 6px;
+            word-break: break-word;
+        }
+
+        .status-badge {
+            display: inline-block;
+            background: #e6f4ea;
+            color: #137333;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 12px;
+            margin-top: 4px;
+            border: 1px solid #ceead6;
+        }
+
+        .id-footer {
+            padding: 10px 15px 15px 15px;
+            background: #fafafa;
+            border-top: 1px dashed #ddd;
+            text-align: center;
+        }
+
+        .barcode-container {
+            margin-top: 5px;
+        }
+
+        .barcode-container svg {
+            max-width: 100%;
+            height: 45px;
+        }
+
+        .btn-download {
+            margin-top: 20px;
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            box-shadow: 0 4px 10px rgba(15, 44, 89, 0.2);
+        }
+
+        .btn-download:hover {
+            background: var(--accent-blue);
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Student ID Generator</h1>
+    <p class="subtitle">The Smartphone Scientist - Community Initiative</p>
+
+    <div class="container">
+        <!-- Input Form -->
+        <div class="form-card">
+            <div class="form-group">
+                <label>Institution / School Name</label>
+                <input type="text" id="inputSchool" value="CISCO NETWORKING" oninput="updateID()">
+            </div>
+            <div class="form-group">
+                <label>Student Full Name</label>
+                <input type="text" id="inputName" value="BRIAN MUTORO" oninput="updateID()">
+            </div>
+            <div class="form-group">
+                <label>Degree / Course Program</label>
+                <input type="text" id="inputProgram" value="INTRODUCTION TO CYBERSECURITY" oninput="updateID()">
+            </div>
+            <div class="form-group">
+                <label>Student ID Number (Auto-increments)</label>
+                <input type="text" id="inputIDNum" value="NTI-0001" oninput="updateID()">
+            </div>
+            <div class="form-group">
+                <label>Valid Through</label>
+                <input type="text" id="inputValid" value="DEC 2026" oninput="updateID()">
+            </div>
+            <div class="form-group">
+                <label>Upload Student Photo</label>
+                <input type="file" id="inputPhoto" accept="image/*" onchange="loadPhoto(event)">
+            </div>
+        </div>
+
+        <!-- ID Card Preview -->
+        <div class="preview-section">
+            <div class="id-card" id="printableCard">
+                <div class="id-header">
+                    <div>
+                        <div class="id-header-title" id="cardSchool">CISCO NETWORKING</div>
+                        <div class="id-header-sub">OFFICIAL STUDENT ID</div>
+                    </div>
+                    <div class="badge-box"></div>
+                </div>
+
+                <div class="id-body">
+                    <div class="photo-frame">
+                        <img id="cardPhoto" src="" alt="Photo" style="display: none;">
+                        <span id="photoPlaceholder" style="font-size: 0.7rem; color: #777; text-align: center; padding: 5px;">3x4 Photo</span>
+                    </div>
+                    <div class="details">
+                        <div class="field-label">Name</div>
+                        <div class="field-value" id="cardName">BRIAN MUTORO</div>
+
+                        <div class="field-label">Degree Program</div>
+                        <div class="field-value" id="cardProgram">INTRODUCTION TO CYBERSECURITY</div>
+
+                        <div class="field-label">Student ID</div>
+                        <div class="field-value" id="cardIDNum">NTI-0001</div>
+
+                        <div class="field-label">Valid Through</div>
+                        <div class="field-value" id="cardValid">DEC 2026</div>
+
+                        <div class="status-badge">ACTIVE STUDENT</div>
+                    </div>
+                </div>
+
+                <div class="id-footer">
+                    <div class="barcode-container">
+                        <svg id="barcode"></svg>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn-download" onclick="downloadIDAsPNG()">Download ID as PNG</button>
+        </div>
+    </div>
+
+    <script>
+        // Store last generated sequence number in browser storage (localStorage)
+        function getNextID() {
+            let lastSeq = localStorage.getItem('nti_last_seq');
+            if (!lastSeq) {
+                lastSeq = 1; // Start from 1 if none exists
+            } else {
+                lastSeq = parseInt(lastSeq) + 1;
+            }
+            let paddedSeq = String(lastSeq).padStart(4, '0');
+            return "NTI-" + paddedSeq;
+        }
+
+        // Set initial ID on first load if input is default
+        window.onload = function() {
+            if (!localStorage.getItem('nti_last_seq')) {
+                localStorage.setItem('nti_last_seq', '1');
+            }
+            // Optional: Uncomment below if you want it to auto-generate next ID on refresh
+            // document.getElementById('inputIDNum').value = getNextID();
+            updateID();
+        };
+
+        function updateID() {
+            document.getElementById('cardSchool').innerText = document.getElementById('inputSchool').value.toUpperCase();
+            document.getElementById('cardName').innerText = document.getElementById('inputName').value.toUpperCase();
+            document.getElementById('cardProgram').innerText = document.getElementById('inputProgram').value.toUpperCase();
+            let currentID = document.getElementById('inputIDNum').value.toUpperCase();
+            document.getElementById('cardIDNum').innerText = currentID;
+            document.getElementById('cardValid').innerText = document.getElementById('inputValid').value.toUpperCase();
+
+            // Generate Barcode using JsBarcode
+            let idText = currentID.trim() || "NTI-0000";
+            try {
+                JsBarcode("#barcode", idText, {
+                    format: "CODE39",
+                    lineColor: "#0f2c59",
+                    width: 1.5,
+                    height: 40,
+                    displayValue: true,
+                    fontSize: 11,
+                    fontOptions: "bold"
+                });
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        function loadPhoto(event) {
+            let reader = new FileReader();
+            reader.onload = function(){
+                let output = document.getElementById('cardPhoto');
+                output.src = reader.result;
+                output.style.display = 'block';
+                document.getElementById('photoPlaceholder').style.display = 'none';
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+
+        function downloadIDAsPNG() {
+            let currentID = document.getElementById('inputIDNum').value.trim();
+            
+            // Extract sequence number and save to localStorage for the next student
+            let match = currentID.match(/(\d+)$/);
+            if (match) {
+                let seqNum = parseInt(match[1], 10);
+                localStorage.setItem('nti_last_seq', seqNum);
+            }
+
+            let cardElement = document.getElementById('printableCard');
+            html2canvas(cardElement, { scale: 3, useCORS: true }).then(canvas => {
+                let link = document.createElement('a');
+                link.download = currentID + '_student_id.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+
+                // Automatically prepare next ID in the input field for the subsequent student
+                setTimeout(() => {
+                    let nextID = getNextID();
+                    document.getElementById('inputIDNum').value = nextID;
+                    updateID();
+                }, 500);
+            });
+        }
+    </script>
+</body>
+</html>

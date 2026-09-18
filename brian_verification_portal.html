@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navakholo TerraHub - Certificate Management Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --navy-deep: #0f2c59;
+            --gold-accent: #c59b27;
+            --bg-canvas: #f4f7f6;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-canvas);
+            color: #333;
+            padding: 20px;
+        }
+
+        header {
+            background: var(--navy-deep);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 4px solid var(--gold-accent);
+        }
+
+        header h1 {
+            font-size: 1.4rem;
+            letter-spacing: 1px;
+        }
+
+        header p {
+            font-size: 0.85rem;
+            color: #d1d5db;
+            margin-top: 5px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .card h2 {
+            font-size: 1.1rem;
+            color: var(--navy-deep);
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--bg-canvas);
+            padding-bottom: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: var(--navy-deep);
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 0.85rem;
+        }
+
+        .btn {
+            background: var(--navy-deep);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background: #1d4ed8;
+        }
+
+        .table-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .table-controls input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 0.85rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 0.8rem;
+        }
+
+        table th, table td {
+            border: 1px solid #eee;
+            padding: 8px;
+            text-align: left;
+        }
+
+        table th {
+            background: var(--navy-deep);
+            color: white;
+        }
+
+        .badge-valid {
+            background: #dcfce7;
+            color: #15803d;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .verify-result {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 6px;
+            display: none;
+            font-size: 0.85rem;
+        }
+
+        .verify-success {
+            background: #dcfce7;
+            border: 1px solid #86efac;
+            color: #166534;
+        }
+
+        .verify-fail {
+            background: #fee2e2;
+            border: 1px solid #fca5a5;
+            color: #991b1b;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>NAVAKHOLO TERRAHUB INITIATIVE</h1>
+        <p>Certificate Management & Verification Portal | Admin: <strong>Brian Mutoro</strong></p>
+    </header>
+
+    <div class="dashboard-grid">
+        <!-- Add Record Section -->
+        <div class="card">
+            <h2>Issuance & Registration Form</h2>
+            <div class="form-group">
+                <label>Student Full Name</label>
+                <input type="text" id="stdName" placeholder="e.g. John Doe">
+            </div>
+            <div class="form-group">
+                <label>Program Track</label>
+                <select id="stdTrack">
+                    <!-- Original Core Tracks -->
+                    <option value="Digital Literacy & Cyber Security">Digital Literacy & Cyber Security</option>
+                    <option value="Mobile Web Development">Mobile Web Development</option>
+                    <option value="Python & AI Fundamentals">Python & AI Fundamentals</option>
+                    
+                    <!-- Top 10 CS & Tech Courses -->
+                    <option value="Full-Stack Software Engineering">Full-Stack Software Engineering</option>
+                    <option value="Ethical Hacking & Network Security">Ethical Hacking & Network Security</option>
+                    <option value="Data Science & Machine Learning">Data Science & Machine Learning</option>
+                    <option value="Cloud Computing & DevOps">Cloud Computing & DevOps</option>
+                    <option value="Mobile App Development (Android/Flutter)">Mobile App Development (Android/Flutter)</option>
+                    <option value="Database Administration & SQL">Database Administration & SQL</option>
+                    <option value="UI/UX Design & Frontend Systems">UI/UX Design & Frontend Systems</option>
+                    <option value="Artificial Intelligence & Prompt Engineering">Artificial Intelligence & Prompt Engineering</option>
+                    <option value="Computer Networks & IT Support">Computer Networks & IT Support</option>
+                    <option value="Embedded Systems & IoT Basics">Embedded Systems & IoT Basics</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Issue Date</label>
+                <input type="date" id="stdDate">
+            </div>
+            <div class="form-group">
+                <label>Certificate Record ID</label>
+                <input type="text" id="stdCertID" readonly placeholder="Click Auto-Generate">
+                <button type="button" onclick="generateID()" style="font-size:0.75rem; margin-top:5px; background:#e2e8f0; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;">Auto-Generate ID</button>
+            </div>
+            <button class="btn" onclick="saveRecord()">Register Record</button>
+        </div>
+
+        <!-- Verification Section -->
+        <div class="card">
+            <h2>Instant Certificate Verification</h2>
+            <p style="font-size:0.8rem; color:#666; margin-bottom:12px;">Verify authenticity by entering the Record ID printed on the certificate.</p>
+            <div class="form-group">
+                <label>Enter Certificate Record ID</label>
+                <input type="text" id="verifyInput" placeholder="e.g. NTHI-2026-8492">
+            </div>
+            <button class="btn" style="background:var(--gold-accent);" onclick="verifyRecord()">Check Database</button>
+
+            <div id="verifyResult" class="verify-result"></div>
+        </div>
+    </div>
+
+    <!-- Active Database Table -->
+    <div style="max-width:1100px; margin:20px auto 0 auto;" class="card">
+        <h2>Issued Certificates Registry</h2>
+        <div class="table-controls">
+            <input type="text" id="searchInput" onkeyup="filterRegistry()" placeholder="Search by Student Name, Course, or Record ID...">
+        </div>
+        <table id="recordsTable">
+            <thead>
+                <tr>
+                    <th>Record ID</th>
+                    <th>Student Name</th>
+                    <th>Program Track</th>
+                    <th>Issue Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Rows injected dynamically -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        let db = JSON.parse(localStorage.getItem('nthi_certificates')) || [
+            { id: "NTHI-PART-2026-001", name: "BRIAN MUTORO", track: "Digital Literacy & Cyber Security", date: "2026-09-01" }
+        ];
+
+        function init() {
+            localStorage.setItem('nthi_certificates', JSON.stringify(db));
+            renderTable(db);
+            document.getElementById('stdDate').valueAsDate = new Date();
+        }
+
+        function generateID() {
+            let rand = Math.floor(1000 + Math.random() * 9000);
+            document.getElementById('stdCertID').value = `NTHI-2026-${rand}`;
+        }
+
+        function saveRecord() {
+            let name = document.getElementById('stdName').value.trim();
+            let track = document.getElementById('stdTrack').value;
+            let date = document.getElementById('stdDate').value;
+            let certID = document.getElementById('stdCertID').value;
+
+            if (!name || !certID) {
+                alert("Please fill all details and generate a Record ID!");
+                return;
+            }
+
+            db.push({ id: certID, name: name.toUpperCase(), track: track, date: date });
+            localStorage.setItem('nthi_certificates', JSON.stringify(db));
+            renderTable(db);
+
+            document.getElementById('stdName').value = '';
+            document.getElementById('stdCertID').value = '';
+            alert("Record successfully registered into Navakholo TerraHub Registry!");
+        }
+
+        function renderTable(dataList) {
+            let tbody = document.querySelector('#recordsTable tbody');
+            tbody.innerHTML = '';
+            dataList.forEach(item => {
+                let tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${item.id}</strong></td>
+                    <td>${item.name}</td>
+                    <td>${item.track}</td>
+                    <td>${item.date}</td>
+                    <td><span class="badge-valid">AUTHENTIC</span></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function filterRegistry() {
+            let query = document.getElementById('searchInput').value.toLowerCase();
+            let filtered = db.filter(item => 
+                item.name.toLowerCase().includes(query) ||
+                item.track.toLowerCase().includes(query) ||
+                item.id.toLowerCase().includes(query)
+            );
+            renderTable(filtered);
+        }
+
+        function verifyRecord() {
+            let searchID = document.getElementById('verifyInput').value.trim().toUpperCase();
+            let resDiv = document.getElementById('verifyResult');
+            
+            let found = db.find(r => r.id.toUpperCase() === searchID);
+
+            resDiv.style.display = 'block';
+            if (found) {
+                resDiv.className = 'verify-result verify-success';
+                resDiv.innerHTML = `<strong>VALID CERTIFICATE FOUND!</strong><br>
+                    <strong>Issued To:</strong> ${found.name}<br>
+                    <strong>Program:</strong> ${found.track}<br>
+                    <strong>Issue Date:</strong> ${found.date}`;
+            } else {
+                resDiv.className = 'verify-result verify-fail';
+                resDiv.innerHTML = `<strong>RECORD NOT FOUND!</strong><br>
+                    No matching certificate ID found in Navakholo TerraHub database.`;
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>

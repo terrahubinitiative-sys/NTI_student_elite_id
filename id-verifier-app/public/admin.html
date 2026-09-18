@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Secure ID Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        :root { --primary: #0f2c59; --accent: #0077b6; }
+        body { font-family: system-ui, sans-serif; background: #f4f7f6; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 100%; max-width: 400px; margin-bottom: 20px; }
+        .form-group { margin-bottom: 12px; }
+        label { display: block; font-size: 0.85rem; font-weight: bold; color: var(--primary); margin-bottom: 4px; }
+        input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; background: var(--primary); color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        
+        /* ID Card Layout */
+        .id-card { width: 350px; background: white; border-radius: 16px; overflow: hidden; border: 1px solid #e0e0e0; box-shadow: 0 8px 20px rgba(0,0,0,0.15); display: none; }
+        .id-header { background: var(--accent); color: white; padding: 12px 15px; font-weight: bold; font-size: 0.85rem; }
+        .id-body { padding: 15px; display: flex; gap: 15px; align-items: center; }
+        .photo-frame { width: 90px; height: 115px; border: 2px solid var(--accent); border-radius: 8px; overflow: hidden; }
+        .photo-frame img { width: 100%; height: 100%; object-fit: cover; }
+        .field-label { font-size: 0.6rem; color: #777; text-transform: uppercase; font-weight: 600; }
+        .field-value { font-size: 0.85rem; color: var(--primary); font-weight: bold; margin-bottom: 6px; }
+        .id-footer { padding: 10px; background: #fafafa; border-top: 1px dashed #ddd; text-align: center; }
+        .id-footer img { width: 90px; height: 90px; }
+    </style>
+</head>
+<body>
+
+    <!-- Password Login Modal -->
+    <div id="loginSection" class="card">
+        <h2>Admin Authentication</h2>
+        <div class="form-group">
+            <label>Master Password</label>
+            <input type="password" id="adminPassword" placeholder="Enter password">
+        </div>
+        <button onclick="login()">Authenticate Session</button>
+        <p id="loginError" style="color: red; font-size: 0.8rem; display: none;">Invalid credentials</p>
+    </div>
+
+    <!-- Protected Generator Interface -->
+    <div id="appSection" style="display: none;" class="card">
+        <h2>Generate Verified ID</h2>
+        <form id="idForm">
+            <div class="form-group"><label>Institution</label><input type="text" id="school" value="KAGGLE" required></div>
+            <div class="form-group"><label>Full Name</label><input type="text" id="name" value="FELICIAN WANYAMA" required></div>
+            <div class="form-group"><label>Degree Program</label><input type="text" id="program" value="PYTHON" required></div>
+            <div class="form-group"><label>Student ID</label><input type="text" id="studentId" value="NTI-0005" required></div>
+            <div class="form-group"><label>Valid Through</label><input type="text" id="validThrough" value="DEC 2026" required></div>
+            <div class="form-group"><label>Student Photo</label><input type="file" id="photo" accept="image/*" required></div>
+            <button type="submit">Generate Record & QR Code</button>
+        </form>
+    </div>
+
+    <!-- Generated Card & Export -->
+    <div class="id-card" id="printableCard">
+        <div class="id-header" id="cardSchool">KAGGLE</div>
+        <div class="id-body">
+            <div class="photo-frame"><img id="cardPhoto" src="" alt="Photo"></div>
+            <div>
+                <div class="field-label">Name</div>
+                <div class="field-value" id="cardName">---</div>
+                <div class="field-label">Degree Program</div>
+                <div class="field-value" id="cardProgram">---</div>
+                <div class="field-label">Student ID</div>
+                <div class="field-value" id="cardIDNum">---</div>
+                <div class="field-label">Valid Through</div>
+                <div class="field-value" id="cardValid">---</div>
+            </div>
+        </div>
+        <div class="id-footer">
+            <img id="cardQR" src="" alt="Verification QR Code">
+            <div style="font-size: 0.65rem; color: #555; margin-top: 4px;">Scan to Verify Authenticity</div>
+        </div>
+    </div>
+    
+    <button id="downloadBtn" style="display:none; width:350px; margin-top:15px;" onclick="downloadCard()">Download PNG Card</button>
+
+    <script>
+        let authToken = localStorage.getItem('id_admin_token');
+
+        if(authToken) showApp();
+
+        async function login() {
+            const password = document.getElementById('adminPassword').value;
+            const res = await fetch('/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ password })
+            });
+            const data = await res.json();
+            if (res.ok) {
+                authToken = data.token;
+                localStorage.setItem('id_admin_token', authToken);
+                showApp();
+            } else {
+                document.getElementById('loginError').style.display = 'block';
+            }
+        }
+
+        function showApp() {
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('appSection').style.display = 'block';
+        }
+
+        document.getElementById('idForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData();
+            formData.append('school', document.getElementById('school').value);
+            formData.append('name', document.getElementById('name').value);
+            formData.append('program', document.getElementById('program').value);
+            formData.append('studentId', document.getElementById('studentId').value);
+            formData.append('validThrough', document.getElementById('validThrough').value);
+            formData.append('photo', document.getElementById('photo').files[0]);
+
+            const res = await fetch('/api/students', {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${authToken}` },
+                body: formData
+            });
+
+            const data = await res.json();
+            if (res.ok) {
+                document.getElementById('cardSchool').innerText = data.student.school;
+                document.getElementById('cardName').innerText = data.student.name;
+                document.getElementById('cardProgram').innerText = data.student.program;
+                document.getElementById('cardIDNum').innerText = data.student.id;
+                document.getElementById('cardValid').innerText = data.student.validThrough;
+                document.getElementById('cardPhoto').src = data.student.photoUrl;
+                document.getElementById('cardQR').src = data.qrCodeDataUrl;
+
+                document.getElementById('printableCard').style.display = 'block';
+                document.getElementById('downloadBtn').style.display = 'block';
+            } else {
+                alert(data.error || 'Failed to generate ID');
+            }
+        });
+
+        function downloadCard() {
+            html2canvas(document.getElementById('printableCard'), { scale: 3 }).then(canvas => {
+                let link = document.createElement('a');
+                link.download = 'verified_student_id.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
+    </script>
+</body>
+</html>

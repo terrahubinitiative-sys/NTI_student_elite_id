@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navakholo TerraHub Initiative - Student ID Scanner</title>
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <header>
+        <div class="logo-group">
+            <img src="Hub.png" alt="TerraHub Logo" class="logo-img" onerror="this.src='https://via.placeholder.com/42?text=TH'">
+            <div class="title-group">
+                <h1>Navakholo TerraHub</h1>
+                <p>FROM GROUND TO GREATNESS</p>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <div class="scanner-card">
+            <h2 style="color: var(--brand-purple); font-size: 1.1rem; font-weight: 800;">Verify Student ID</h2>
+            <p style="font-size: 0.7rem; color: #666; margin-top: 3px;">Scan card camera or upload ID photo</p>
+            
+            <div id="reader"></div>
+
+            <div class="upload-option">
+                <label class="file-btn" for="qrFileInput">📁 Upload ID Card Image</label>
+                <input type="file" id="qrFileInput" accept="image/*" style="display: none;" onchange="handleQrFileUpload(event)">
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

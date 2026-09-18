@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Admin Portal - Navakholo Terrahub</title>
+    <style>
+        :root {
+            --bg-deep: #07040d;
+            --card-bg: rgba(18, 10, 30, 0.95);
+            --accent-gold: #f39c12;
+            --danger-red: #e74c3c;
+            --success-green: #2ecc71;
+            --text-main: #f5f6fa;
+            --text-muted: #bdc3c7;
+            --border-color: rgba(243, 156, 18, 0.25);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-deep); color: var(--text-main); min-height: 100vh; padding: 20px; display: flex; justify-content: center; }
+        .admin-wrapper { width: 100%; max-width: 900px; display: flex; flex-direction: column; gap: 25px; }
+        header { background: var(--card-bg); border: 1px solid var(--border-color); padding: 20px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
+        h1 { color: var(--accent-gold); font-size: 1.5rem; font-family: 'Times New Roman', Times, serif; }
+        .card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        h2 { color: var(--accent-gold); font-size: 1.2rem; margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; }
+        label { display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 5px; margin-top: 12px; }
+        input[type="text"], textarea { width: 100%; padding: 10px 12px; background: var(--bg-deep); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 6px; font-size: 0.95krem; outline: none; }
+        input[type="text"]:focus, textarea:focus { border-color: var(--accent-gold); }
+        textarea { resize: vertical; height: 90px; }
+        .btn { background: var(--accent-gold); color: var(--bg-deep); border: none; padding: 10px 18px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 0.95rem; margin-top: 15px; transition: opacity 0.2s; }
+        .btn:hover { opacity: 0.9; }
+        .flash { padding: 12px; border-radius: 6px; font-size: 0.9rem; margin-bottom: 15px; }
+        .flash-success { background: rgba(46, 204, 113, 0.2); border: 1px solid var(--success-green); color: var(--success-green); }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .nav-link { color: var(--accent-gold); text-decoration: none; font-size: 0.9rem; border: 1px solid var(--border-color); padding: 8px 14px; border-radius: 6px; background: var(--bg-deep); }
+        .nav-link:hover { background: rgba(243,156,18,0.1); }
+    </style>
+</head>
+<body>
+
+    <div class="admin-wrapper">
+        <header>
+            <h1>Admin Control Panel</h1>
+            <a href="/explore" class="nav-link">View Public Portal →</a>
+        </header>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash flash-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- UPDATE PLATFORM SETTINGS -->
+        <div class="card">
+            <h2>Platform Settings & Metrics</h2>
+            <form method="POST">
+                <input type="hidden" name="action" value="update_settings">
+                <label>Current Mission Description</label>
+                <textarea name="current_mission">{{ settings.current_mission }}</textarea>
+                
+                <div class="grid-2">
+                    <div>
+                        <label>Enrolled Students Count</label>
+                        <input type="text" name="enrolled_students" value="{{ settings.enrolled_students }}">
+                    </div>
+                    <div>
+                        <label>Working Youths Count</label>
+                        <input type="text" name="working_youths" value="{{ settings.working_youths }}">
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <div>
+                        <label>WhatsApp Link</label>
+                        <input type="text" name="whatsapp_link" value="{{ settings.whatsapp_link }}">
+                    </div>
+                    <div>
+                        <label>Facebook Link</label>
+                        <input type="text" name="facebook_link" value="{{ settings.facebook_link }}">
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <div>
+                        <label>Instagram Link</label>
+                        <input type="text" name="instagram_link" value="{{ settings.instagram_link }}">
+                    </div>
+                    <div>
+                        <label>Contact Email</label>
+                        <input type="text" name="contact_email" value="{{ settings.contact_email }}">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn">Save Settings</button>
+            </form>
+        </div>
+
+        <!-- ADD COMPLETED PROJECT -->
+        <div class="card">
+            <h2>Add Completed Project</h2>
+            <form method="POST">
+                <input type="hidden" name="action" value="add_completed_project">
+                <label>Project Title</label>
+                <input type="text" name="title" placeholder="e.g. Community Mesh Wi-Fi" required>
+                <label>Project Description</label>
+                <textarea name="description" placeholder="Brief project summary..." required></textarea>
+                <button type="submit" class="btn">Add Completed Project</button>
+            </form>
+        </div>
+
+        <!-- ADD UPCOMING PROJECT -->
+        <div class="card">
+            <h2>Add Upcoming Project</h2>
+            <form method="POST">
+                <input type="hidden" name="action" value="add_upcoming_project">
+                <label>Project Title</label>
+                <input type="text" name="title" placeholder="e.g. AI Coding Bootcamp" required>
+                <label>Project Description</label>
+                <textarea name="description" placeholder="Brief project goals..." required></textarea>
+                <button type="submit" class="btn">Add Upcoming Project</button>
+            </form>
+        </div>
+
+        <!-- ADD CERTIFICATE -->
+        <div class="card">
+            <h2>Issue / Add Verified Certificate</h2>
+            <form method="POST">
+                <input type="hidden" name="action" value="add_certificate">
+                <label>Certificate ID</label>
+                <input type="text" name="cert_id" placeholder="e.g. TERRA-2026-003" required>
+                <label>Student Full Name</label>
+                <input type="text" name="name" placeholder="e.g. John Doe" required>
+                <label>Course Title</label>
+                <input type="text" name="course" placeholder="e.g. Mobile Software Engineering" required>
+                <button type="submit" class="btn">Issue Certificate</button>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

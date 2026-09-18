@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verified Document & Portfolio - Nakuru International College</title>
+    <style>
+        body {
+            background-color: #070913;
+            color: #f8fafc;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 12pt;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .top-nav {
+            width: 100%;
+            max-width: 680px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .btn-back {
+            background: #38bdf8;
+            color: #000;
+            border: none;
+            padding: 8px 16px;
+            font-family: 'Times New Roman', Times, serif;
+            font-weight: bold;
+            font-size: 12pt;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .btn-back:hover { background: #0ea5e9; }
+
+        /* Document Container (Certificate on Top) */
+        .document-container {
+            background: #ffffff;
+            color: #000000;
+            width: 100%;
+            max-width: 680px;
+            padding: 40px;
+            box-sizing: border-box;
+            border: 5px double #f59e0b;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            margin-bottom: 30px;
+        }
+
+        .doc-header {
+            text-align: center;
+            border-bottom: 2px solid #000;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .doc-header h1 {
+            font-size: 18pt;
+            margin: 0;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .doc-header p {
+            font-size: 12pt;
+            margin: 5px 0 0 0;
+            font-style: italic;
+        }
+
+        .doc-body {
+            line-height: 1.6;
+            font-size: 12pt;
+            text-align: center;
+        }
+
+        .doc-body p {
+            margin: 12px 0;
+        }
+
+        .signatures {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-top: 40px;
+            border-top: 1px solid #ccc;
+            padding-top: 15px;
+            font-size: 12pt;
+        }
+
+        .qr-box {
+            text-align: center;
+        }
+
+        .qr-box img {
+            width: 70px;
+            height: 70px;
+        }
+
+        /* Portfolio Container (Positioned directly below the Certificate) */
+        .portfolio-container {
+            background: rgba(15, 23, 42, 0.95);
+            color: #f8fafc;
+            width: 100%;
+            max-width: 680px;
+            padding: 30px;
+            box-sizing: border-box;
+            border: 1px solid rgba(245, 158, 11, 0.4);
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            margin-bottom: 30px;
+        }
+
+        .portfolio-title {
+            color: #f59e0b;
+            font-size: 16pt;
+            text-transform: uppercase;
+            border-bottom: 1px solid rgba(245, 158, 11, 0.3);
+            padding-bottom: 8px;
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-nav">
+        <a href="/portal" class="btn-back">&larr; Back to Portal</a>
+    </div>
+
+    <!-- CERTIFICATE (TOP) -->
+    <div class="document-container">
+        <div class="doc-header">
+            <h1>Nakuru International College</h1>
+            <p>From Ground to Greatness &bull; Secure Database Verified</p>
+            <div style="font-size: 14pt; margin-top: 8px; font-weight: bold; color: #b45309;">Certificate of Completion</div>
+        </div>
+
+        <div class="doc-body">
+            <p>This is proudly presented to</p>
+            <p style="font-size: 16pt; font-weight: bold; text-decoration: underline;">{{ record.full_name }}</p>
+            <p>For successfully completing program requirements in <strong>{{ record.course_name }}</strong> for the period of <strong>{{ record.date_joined }}-{{ record.date_graduated }}</strong>.</p>
+        </div>
+
+        <div class="signatures">
+            <div style="text-align: left;">
+                <strong>{{ record.issuer_name }}</strong><br>
+                <span style="font-size: 10pt;">DIRECTOR / FOUNDER</span>
+            </div>
+            
+            <div class="qr-box">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=VERIFIED-{{ record_id }}" alt="QR">
+                <div style="font-size: 9pt; margin-top: 2px; font-family: monospace;">{{ record.certificate_code }}</div>
+            </div>
+
+            <div style="text-align: right;">
+                <strong>{{ record.issue_date }}</strong><br>
+                <span style="font-size: 10pt;">ISSUE DATE</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PORTFOLIO (BOTTOM) -->
+    <div class="portfolio-container">
+        <h2 class="portfolio-title">Verified Professional Portfolio</h2>
+        <p><strong>Full Name:</strong> {{ record.full_name }}</p>
+        <p><strong>Professional Title:</strong> {{ record.professional_title }}</p>
+        <p><strong>Base Location:</strong> {{ record.location }}</p>
+        <p><strong>GitHub Repository:</strong> {{ record.github }}</p>
+        <p><strong>Executive Pitch:</strong> {{ record.executive_pitch }}</p>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TerraHub Admin Workspace</title>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <header>
+        <div class="logo-group">
+            <img src="Hub.png" alt="TerraHub Logo" class="logo-img" onerror="this.src='https://via.placeholder.com/42?text=TH'">
+            <div class="title-group">
+                <h1>Navakholo TerraHub</h1>
+                <p>INTERNAL ADMIN SYSTEM</p>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        
+        <div id="adminAuth" class="admin-card" style="margin-top: 20px;">
+            <h2 style="color: var(--brand-purple); margin-bottom: 6px; font-weight: 800; font-size: 1.1rem;">Admin Authorization</h2>
+            <p style="font-size: 0.75rem; color: #666; margin-bottom: 12px;">Enter master security passcode</p>
+            <div class="form-group">
+                <input type="password" id="adminPassInput" placeholder="Enter Passcode">
+            </div>
+            <button class="btn" onclick="loginAdmin()">Unlock System</button>
+            <p id="authError" style="color: var(--error-red); font-size: 0.75rem; margin-top: 8px; font-weight: 700; display: none;">Access Denied: Incorrect Security Passcode</p>
+        </div>
+
+        <div id="adminWorkspace" class="admin-layout" style="display: none;">
+            
+            <div class="admin-card">
+                <h3 style="color: var(--brand-purple); margin-bottom: 10px; font-size: 0.95rem; font-weight: 800;">Generate / Edit ID</h3>
+                <div class="form-group">
+                    <label>Student Full Name</label>
+                    <input type="text" id="inName" value="FELICIAN WANYAMA" oninput="liveUpdateCard()">
+                </div>
+                <div class="form-group">
+                    <label>Program / Course</label>
+                    <input type="text" id="inProgram" value="PYTHON PROGRAMMING" oninput="liveUpdateCard()">
+                </div>
+                <div class="form-group">
+                    <label>Student ID Number</label>
+                    <input type="text" id="inID" value="NTI-0001" oninput="liveUpdateCard()">
+                </div>
+                <div class="form-group">
+                    <label>Valid Through</label>
+                    <input type="text" id="inValid" value="DEC 2026" oninput="liveUpdateCard()">
+                </div>
+                <div class="form-group">
+                    <label>Upload Student Photo</label>
+                    <input type="file" id="inPhoto" accept="image/*" onchange="handlePhotoUpload(event)">
+                </div>
+
+                <button class="btn" onclick="saveAndGenerate()">Download Card & Save Record</button>
+            </div>
+
+            <div style="display: flex; flex-direction: column; align-items: center;">
+                <div class="id-card-wrap" id="printableCard">
+                    <div class="id-card-header">
+                        <img src="Hub.png" alt="Logo" onerror="this.src='https://via.placeholder.com/28?text=TH'">
+                        <div class="id-card-header-text">
+                            <h2>Navakholo TerraHub</h2>
+                            <p>OFFICIAL STUDENT ID</p>
+                        </div>
+                    </div>
+
+                    <div class="id-card-body">
+                        <div class="photo-box">
+                            <img id="cardPhoto" src="" style="display: none;">
+                            <span id="photoText" style="font-size: 0.55rem; color: #888; font-weight: 700;">No Photo</span>
+                        </div>
+                        <div class="details id-details">
+                            <div class="id-field"><div class="id-label">Name</div><div class="id-val" id="cardName">FELICIAN WANYAMA</div></div>
+                            <div class="id-field"><div class="id-label">Program</div><div class="id-val" id="cardProgram">PYTHON PROGRAMMING</div></div>
+                            <div class="id-field"><div class="id-label">ID Number</div><div class="id-val" id="cardID">NTI-0001</div></div>
+                            <div class="id-field"><div class="id-label">Valid Through</div><div class="id-val" id="cardValid">DEC 2026</div></div>
+                            <div class="id-status">ACTIVE STUDENT</div>
+                        </div>
+
+                        <div class="qr-side">
+                            <div id="qrcode"></div>
+                            <div class="footer-tag">VERIFIED</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="admin-card" style="max-width: 100%; flex: 100%;">
+                <h3 style="color: var(--brand-purple); font-size: 0.95rem; font-weight: 800;">Student Records Database</h3>
+                <div style="overflow-x: auto;">
+                    <table class="records-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Program</th>
+                                <th>Valid Until</th>
+                                <th>Token</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="databaseTableBody" style="color: #fff;"></tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Configuration & Script Injection -->
+    <script src="config.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

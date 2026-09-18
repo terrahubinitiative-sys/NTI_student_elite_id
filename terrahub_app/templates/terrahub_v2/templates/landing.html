@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navakholo TerraHub Initiative</title>
+    <style>
+        body {
+            background-color: #070913;
+            color: #f8fafc;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 12pt;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+        .content-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 20px;
+            text-align: center;
+            max-width: 650px;
+            margin: 0 auto;
+        }
+        img.logo {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            border: 2px solid #f59e0b;
+            object-fit: cover;
+            margin-bottom: 20px;
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
+        }
+        h1 {
+            font-size: 18pt;
+            color: #f59e0b;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        p {
+            line-height: 1.6;
+            margin-bottom: 15px;
+            color: #cbd5e1;
+        }
+        .btn-explore {
+            display: inline-block;
+            background: #f59e0b;
+            color: #000;
+            padding: 12px 30px;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 12pt;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 6px;
+            margin-top: 20px;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+        }
+        .btn-explore:hover {
+            opacity: 0.9;
+        }
+        .social-footer {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.95);
+            padding: 15px 0;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .social-footer a {
+            color: #38bdf8;
+            text-decoration: none;
+            font-size: 12pt;
+            margin: 0 12px;
+        }
+        .social-footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="content-wrapper">
+        <img src="{{ url_for('static', filename='Hub.png') }}" alt="Logo" class="logo" onerror="this.src='https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=NakuruInternationalCollege'">
+        <h1>Navakholo TerraHub Initiative</h1>
+        
+        <p>Navakholo TerraHub Initiative  stands as a premier institution dedicated to transforming grassroots potential into exceptional technical competence. We specialize in empowering youth with cutting-edge mobile software engineering, decentralized digital infrastructure, and practical computing skills designed for the modern global economy.</p>
+        
+        <p>Rooted in excellence and driven by innovation, our mission is to provide rigorous, accessible, and database-verified education that bridges the gap between local talent and world-class technological achievement, truly taking our learners from ground to greatness.</p>
+        
+        <a href="/portal" class="btn-explore">Enter to Explore</a>
+    </div>
+
+    <div class="social-footer">
+        <a href="{{ data.facebook }}" target="_blank">Facebook</a> |
+        <a href="{{ data.instagram }}" target="_blank">Instagram</a> |
+        <a href="{{ data.whatsapp }}" target="_blank">WhatsApp</a> |
+        <a href="mailto:{{ data.email }}">Email</a>
+    </div>
+
+</body>
+</html>

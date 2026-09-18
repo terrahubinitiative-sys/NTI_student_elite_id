@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navakholo TerraHub - Certificate Generator</title>
+    <!-- QRCode.js for generating verification QR codes -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <!-- html2canvas for converting HTML certificate to High-Res PNG -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #0f2c59;
+            --accent-gold: #c59b27;
+            --bg-color: #f4f7f6;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Georgia', 'Times New Roman', serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: #333;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 5px;
+            font-size: 1.6rem;
+            text-align: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        p.subtitle {
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            text-align: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            width: 100%;
+            max-width: 1100px;
+            justify-content: center;
+        }
+
+        .form-card {
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            flex: 1;
+            min-width: 300px;
+            max-width: 380px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: var(--primary-color);
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-family: inherit;
+        }
+
+        .preview-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 2;
+            min-width: 340px;
+            overflow-x: auto;
+        }
+
+        /* Certificate Landscape Layout */
+        .certificate {
+            width: 750px;
+            height: 530px;
+            background: #ffffff;
+            border: 12px solid var(--primary-color);
+            padding: 25px;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background-image: radial-gradient(circle at center, #ffffff 0%, #fbfbfb 100%);
+        }
+
+        .cert-inner-border {
+            border: 2px solid var(--accent-gold);
+            height: 100%;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .cert-header {
+            width: 100%;
+        }
+
+        .org-name {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .cert-title {
+            font-size: 2.1rem;
+            color: var(--accent-gold);
+            font-style: italic;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .cert-body {
+            margin: 15px 0;
+            width: 100%;
+        }
+
+        .cert-text {
+            font-size: 0.95rem;
+            color: #555;
+        }
+
+        .student-name {
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin: 10px 0;
+            border-bottom: 2px solid var(--accent-gold);
+            display: inline-block;
+            padding: 0 20px 5px 20px;
+            text-transform: uppercase;
+        }
+
+        .course-name {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #222;
+            margin-top: 5px;
+        }
+
+        .cert-footer {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-top: 10px;
+        }
+
+        .signature-block {
+            text-align: center;
+            width: 180px;
+        }
+
+        .signature-line {
+            border-top: 1px solid #777;
+            margin-top: 35px;
+            margin-bottom: 4px;
+        }
+
+        .signature-title {
+            font-size: 0.75rem;
+            color: #666;
+            text-transform: uppercase;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .qr-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #qrcode img {
+            border: 2px solid var(--primary-color);
+            padding: 3px;
+            background: white;
+        }
+
+        .cert-id-text {
+            font-size: 0.65rem;
+            color: #777;
+            margin-top: 4px;
+            font-family: monospace;
+        }
+
+        .btn-download {
+            margin-top: 20px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-family: 'Segoe UI', sans-serif;
+            box-shadow: 0 4px 12px rgba(15, 44, 89, 0.2);
+        }
+
+        .btn-download:hover {
+            background: #1d4ed8;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Certificate Generator & Verification System</h1>
+    <p class="subtitle">Navakholo TerraHub Initiative — Official Credential Issuer</p>
+
+    <div class="container">
+        <!-- Input Form -->
+        <div class="form-card">
+            <div class="form-group">
+                <label>Recipient Full Name</label>
+                <input type="text" id="inputName" value="BRIAN MUTORO" oninput="updateCertificate()">
+            </div>
+            <div class="form-group">
+                <label>Course / Achievement Title</label>
+                <input type="text" id="inputCourse" value="INTRODUCTION TO CYBERSECURITY" oninput="updateCertificate()">
+            </div>
+            <div class="form-group">
+                <label>Certificate ID / Credential No.</label>
+                <input type="text" id="inputCertID" value="NTH-CERT-2026-001" oninput="updateCertificate()">
+            </div>
+            <div class="form-group">
+                <label>Date of Issuance</label>
+                <input type="text" id="inputDate" value="SEPTEMBER 14, 2026" oninput="updateCertificate()">
+            </div>
+            <div class="form-group">
+                <label>Verification Link / Domain</label>
+                <input type="text" id="inputVerifyURL" value="https://navakholoterrahub.org/verify?id=NTH-CERT-2026-001" oninput="updateCertificate()">
+            </div>
+        </div>
+
+        <!-- Certificate Preview -->
+        <div class="preview-section">
+            <div class="certificate" id="printableCert">
+                <div class="cert-inner-border">
+                    <div class="cert-header">
+                        <div class="org-name">Navakholo TerraHub Initiative</div>
+                        <div class="cert-title">Certificate of Participation</div>
+                    </div>
+
+                    <div class="cert-body">
+                        <p class="cert-text">This is proudly presented to</p>
+                        <div class="student-name" id="certName">BRIAN MUTORO</div>
+                        <p class="cert-text">for successfully participating in and completing the course</p>
+                        <div class="course-name" id="certCourse">INTRODUCTION TO CYBERSECURITY</div>
+                    </div>
+
+                    <div class="cert-footer">
+                        <div class="signature-block">
+                            <div class="signature-line"></div>
+                            <div class="signature-title">Ezra Wanyama<br><b>Lead Founder & Director</b></div>
+                        </div>
+
+                        <div class="qr-block">
+                            <div id="qrcode"></div>
+                            <div class="cert-id-text" id="certIDDisplay">ID: NTH-CERT-2026-001</div>
+                        </div>
+
+                        <div class="signature-block">
+                            <div class="signature-line"></div>
+                            <div class="signature-title" id="certDateDisplay">Issued: SEP 14, 2026<br><b>Navakholo TerraHub</b></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn-download" onclick="downloadCertAsPNG()">Download Certificate as PNG</button>
+        </div>
+    </div>
+
+    <script>
+        let qrCodeInstance = null;
+
+        function updateCertificate() {
+            let name = document.getElementById('inputName').value.trim() || "STUDENT NAME";
+            let course = document.getElementById('inputCourse').value.trim() || "COURSE TITLE";
+            let certID = document.getElementById('inputCertID').value.trim() || "NTH-CERT-000";
+            let certDate = document.getElementById('inputDate').value.trim() || "SEPTEMBER 2026";
+            let verifyURL = document.getElementById('inputVerifyURL').value.trim() || ("https://navakholoterrahub.org/verify?id=" + certID);
+
+            document.getElementById('certName').innerText = name.toUpperCase();
+            document.getElementById('certCourse').innerText = course.toUpperCase();
+            document.getElementById('certIDDisplay').innerText = "ID: " + certID.toUpperCase();
+            document.getElementById('certDateDisplay').innerHTML = "Issued: " + certDate + "<br><b>Navakholo TerraHub</b>";
+
+            // Re-generate QR Code
+            document.getElementById('qrcode').innerHTML = "";
+            qrCodeInstance = new QRCode(document.getElementById("qrcode"), {
+                text: verifyURL,
+                width: 75,
+                height: 75,
+                colorDark : "#0f2c59",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.H
+            });
+        }
+
+        function downloadCertAsPNG() {
+            let certElement = document.getElementById('printableCert');
+            let filename = (document.getElementById('inputCertID').value.trim() || 'Certificate') + '.png';
+            
+            html2canvas(certElement, { scale: 3, useCORS: true }).then(canvas => {
+                let link = document.createElement('a');
+                link.download = filename;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
+
+        window.onload = function() {
+            updateCertificate();
+        };
+    </script>
+</body>
+</html>

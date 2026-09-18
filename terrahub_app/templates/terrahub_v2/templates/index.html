@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navkholo Terrahub Initiative</title>
+    <style>
+        :root {
+            --bg-deep: #070913;
+            --panel-bg: rgba(15, 23, 42, 0.90);
+            --primary: #38bdf8;
+            --accent-gold: #f59e0b;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: #f8fafc;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(44deg, transparent 45%, rgba(56, 189, 248, 0.08) 50%, transparent 55%),
+                        linear-gradient(135deg, transparent 40%, rgba(245, 158, 11, 0.06) 48%, transparent 52%);
+            background-size: 200% 200%;
+            animation: lightPass 8s ease infinite;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        @keyframes lightPass {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .header img {
+            width: 85px;
+            height: 85px;
+            border-radius: 50%;
+            border: 2px solid var(--accent-gold);
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
+            margin-bottom: 12px;
+            object-fit: cover;
+        }
+
+        h1 {
+            font-size: 21px;
+            letter-spacing: 1.5px;
+            color: var(--accent-gold);
+            margin: 5px 0;
+        }
+
+        .tagline {
+            font-size: 11px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .card {
+            background: var(--panel-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            width: 100%;
+            max-width: 450px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+        }
+
+        .card h2 {
+            font-size: 16px;
+            color: var(--accent-gold);
+            margin-top: 0;
+            margin-bottom: 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 6px;
+        }
+
+        .card p {
+            font-size: 12px;
+            color: #cbd5e1;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .stat-box {
+            background: rgba(11, 15, 25, 0.6);
+            border: 1px solid #334155;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 10px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            margin-top: 2px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            background: #0b0f19;
+            border: 1px solid #334155;
+            color: #fff;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 14px;
+            margin-bottom: 12px;
+            outline: none;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--primary);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        button:hover { opacity: 0.9; }
+
+        .btn-explore { background: var(--accent-gold); color: #000; font-size: 15px; letter-spacing: 1px; }
+        .btn-portfolio { background: #f59e0b; color: #000; }
+        .btn-cert { background: #10b981; color: #fff; }
+
+        .back-btn-link {
+            background: none;
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            color: var(--primary);
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+        .back-btn-link:hover { background: rgba(56, 189, 248, 0.1); }
+
+        .social-footer {
+            text-align: center;
+            margin-top: 10px;
+            padding: 15px 0;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            width: 100%;
+            max-width: 450px;
+        }
+        .social-footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 12px;
+            margin: 0 8px;
+            font-weight: 500;
+        }
+        .social-footer a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <img src="{{ url_for('static', filename='Hub.png') }}" alt="Logo" onerror="this.src='https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=Terrahub'">
+        <h1>NAVKHOLO TERRAHUB PORTAL</h1>
+        <div class="tagline">From Ground to Greatness</div>
+    </div>
+
+    {% if landing_mode %}
+        <!-- LANDING PAGE VIEW -->
+        <div class="card">
+            <h2>About Navkholo Terrahub Initiative</h2>
+            <p>Navkholo Terrahub Initiative is a community-driven digital empowerment platform designed to bridge the technological gap in rural regions. We provide grassroots innovators and youths with high-level technical training, resources, and platforms to build real-world software solutions.</p>
+            <p>Our core mission is to transform rural potentials into global technological excellence by fostering mobile-first software engineering, secure coding practices, and sustainable digital entrepreneurship from the ground up.</p>
+            
+            <button onclick="window.location.href='/portal'" class="btn-explore" style="margin-top: 10px;">Traction &bull; Enter to Explore</button>
+        </div>
+
+        <div class="card">
+            <h2>Impact & Enrollment Statistics</h2>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-number">{{ data.students_enrolled }}</div>
+                    <div class="stat-label">Students Enrolled</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">{{ data.students_earning }}</div>
+                    <div class="stat-label">Earning / Working</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Project Milestones</h2>
+            <p><strong style="color: var(--primary);">Current Project:</strong> {{ data.current_project }}</p>
+            <p><strong style="color: #10b981;">Completed Projects:</strong> {{ data.completed_project }}</p>
+            <p><strong style="color: var(--accent-gold);">Upcoming Projects:</strong> {{ data.upcoming_project }}</p>
+        </div>
+
+    {% else %}
+        <!-- USER / PORTAL PANEL VIEW -->
+        <button class="back-btn-link" onclick="window.location.href='/'">&larr; Back to Landing Page</button>
+
+        <!-- Student Portfolio Verification Card -->
+        <div class="card">
+            <h2>Student Portfolio Verification</h2>
+            <p>Enter Portfolio ID (e.g. TERRA-2026-001) to view verified student profile.</p>
+            <form onsubmit="event.preventDefault(); window.location.href='/portfolio/' + document.getElementById('port_id').value;">
+                <input type="text" id="port_id" placeholder="TERRA-2026-001" required>
+                <button type="submit" class="btn-portfolio">View Portfolio</button>
+            </form>
+        </div>
+
+        <!-- Official Certificate Verification Card -->
+        <div class="card">
+            <h2>Official Certificate Verification</h2>
+            <p>Enter Certificate ID (e.g. TERRA-2026-001) to open and download the official certificate.</p>
+            <form onsubmit="event.preventDefault(); window.location.href='/verify/' + document.getElementById('cert_id').value;">
+                <input type="text" id="cert_id" placeholder="TERRA-2026-001" required>
+                <button type="submit" class="btn-cert">Open Certificate</button>
+            </form>
+        </div>
+
+        <!-- Dashboard Stats & Projects Section -->
+        <div class="card">
+            <h2>Portal Statistics & Projects</h2>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-number">{{ data.students_enrolled }}</div>
+                    <div class="stat-label">Students Enrolled</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">{{ data.students_earning }}</div>
+                    <div class="stat-label">Earning / Working</div>
+                </div>
+            </div>
+            <p><strong style="color: var(--primary);">Current Project:</strong> {{ data.current_project }}</p>
+            <p><strong style="color: #10b981;">Completed:</strong> {{ data.completed_project }}</p>
+            <p><strong style="color: var(--accent-gold);">Upcoming:</strong> {{ data.upcoming_project }}</p>
+        </div>
+
+        <!-- Social Media Links Footer -->
+        <div class="social-footer">
+            <a href="{{ data.facebook }}" target="_blank">Facebook</a> |
+            <a href="{{ data.instagram }}" target="_blank">Instagram</a> |
+            <a href="{{ data.whatsapp }}" target="_blank">WhatsApp</a> |
+            <a href="mailto:{{ data.email }}">Email</a>
+        </div>
+    {% endif %}
+
+</body>
+</html>

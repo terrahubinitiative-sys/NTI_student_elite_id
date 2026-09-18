@@ -1,0 +1,149 @@
+:root {
+    --brand-purple: #1a0528;
+    --brand-purple-light: #2b0b3f;
+    --brand-accent: #6a0ded;
+    --brand-gold: #f7b32b;
+    --brand-gold-glow: rgba(247, 179, 43, 0.3);
+    --bg-dark: #0d0216;
+    --card-bg: #ffffff;
+    --text-main: #1a0528;
+    --success-green: #06d6a0;
+    --error-red: #ef476f;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+
+body { 
+    background-color: var(--bg-dark); 
+    color: #fff; 
+    min-height: 100vh; 
+    width: 100vw;
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    padding-bottom: 30px;
+}
+
+header { 
+    width: 100%; 
+    background: linear-gradient(135deg, var(--brand-purple), var(--brand-purple-light)); 
+    border-bottom: 2px solid var(--brand-gold); 
+    padding: 12px 18px; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    box-shadow: 0 4px 20px rgba(0,0,0,0.6); 
+}
+
+.logo-group { display: flex; align-items: center; gap: 12px; }
+.logo-img { width: 42px; height: 42px; border-radius: 50%; border: 2px solid var(--brand-gold); object-fit: cover; }
+.title-group h1 { font-size: 1rem; color: #fff; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 800; }
+.title-group p { font-size: 0.6rem; color: var(--brand-gold); font-weight: 700; }
+
+.main-container { width: 100%; max-width: 900px; padding: 15px; display: flex; flex-direction: column; align-items: center; }
+
+.scanner-card, .admin-card { 
+    background: var(--card-bg); 
+    color: var(--text-main); 
+    border-radius: 16px; 
+    padding: 20px; 
+    width: 100%; 
+    max-width: 440px; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+}
+
+#reader { width: 100%; border-radius: 12px; overflow: hidden; border: 2px solid var(--brand-purple); margin-top: 12px; }
+
+.upload-option { margin-top: 15px; padding-top: 12px; border-top: 1px dashed #ccc; text-align: center; }
+.file-btn { 
+    display: inline-block; 
+    background: var(--brand-purple); 
+    color: var(--brand-gold); 
+    border: 1px solid var(--brand-gold); 
+    padding: 10px 16px; 
+    border-radius: 8px; 
+    font-weight: 700; 
+    font-size: 0.8rem; 
+    cursor: pointer; 
+}
+
+.verify-result { margin-top: 15px; padding: 15px; border-radius: 12px; display: none; text-align: center; }
+.verify-result.valid { background: #e6f9f4; border: 2px solid var(--success-green); color: #046c51; }
+.verify-result.invalid { background: #ffeef2; border: 2px solid var(--error-red); color: #9d1737; }
+.verify-photo { width: 75px; height: 75px; border-radius: 50%; object-fit: cover; border: 2.5px solid var(--brand-gold); margin: 8px auto; display: block; }
+
+.admin-layout { display: flex; flex-wrap: wrap; gap: 20px; width: 100%; justify-content: center; }
+.form-group { margin-bottom: 10px; text-align: left; }
+.form-group label { display: block; font-size: 0.7rem; font-weight: 800; color: var(--brand-purple); margin-bottom: 3px; text-transform: uppercase; }
+.form-group input { width: 100%; padding: 8px 10px; border: 1.5px solid #ccc; border-radius: 6px; font-size: 0.85rem; outline: none; }
+
+.btn { 
+    width: 100%; 
+    background: var(--brand-purple); 
+    color: var(--brand-gold); 
+    border: 1px solid var(--brand-gold); 
+    padding: 10px; 
+    border-radius: 8px; 
+    font-weight: 800; 
+    font-size: 0.85rem; 
+    cursor: pointer; 
+    margin-top: 8px; 
+}
+.btn-edit { background: #0077b6; color: #fff; border: none; }
+.btn-danger { background: var(--error-red); color: white; border: none; }
+
+/* OPTIMIZED CR80 LANDSCAPE CARD (360px x 220px) */
+.id-card-wrap { 
+    width: 360px; 
+    height: 220px; 
+    background: #ffffff; 
+    border-radius: 12px; 
+    overflow: hidden; 
+    border: 2px solid var(--brand-gold); 
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5); 
+    display: flex; 
+    flex-direction: column; 
+    position: relative; 
+    color: #1a0528; 
+}
+
+.id-card-header { 
+    background: linear-gradient(135deg, var(--brand-purple), var(--brand-accent)); 
+    color: white; 
+    padding: 8px 12px; 
+    display: flex; 
+    align-items: center; 
+    gap: 8px; 
+    border-bottom: 2px solid var(--brand-gold); 
+}
+.id-card-header img { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--brand-gold); object-fit: cover; }
+.id-card-header-text h2 { font-size: 0.65rem; text-transform: uppercase; color: #fff; font-weight: 800; }
+.id-card-header-text p { font-size: 0.48rem; color: var(--brand-gold); font-weight: 700; }
+
+.id-card-body { padding: 10px; display: flex; gap: 8px; flex: 1; align-items: center; }
+.photo-box { width: 75px; height: 95px; border: 1.5px solid var(--brand-gold); border-radius: 6px; overflow: hidden; background: #f0f0f0; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.photo-box img { width: 100%; height: 100%; object-fit: cover; }
+
+.id-details { flex-grow: 1; text-align: left; }
+.id-field { margin-bottom: 3px; }
+.id-label { font-size: 0.45rem; color: #777; text-transform: uppercase; font-weight: 800; }
+.id-val { font-size: 0.65rem; font-weight: 800; color: var(--brand-purple); word-break: break-word; }
+.id-status { display: inline-block; background: #e6f9f4; color: #046c51; font-size: 0.48rem; font-weight: 800; padding: 1px 6px; border-radius: 8px; border: 1px solid #a3e9d5; }
+
+/* QR CODE CONTAINER WITH WHITE QUIET ZONE */
+.qr-side { 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+    padding: 4px;
+    background: #ffffff;
+    border: 1px solid #eee;
+    border-radius: 8px;
+}
+#qrcode img { display: block; }
+.footer-tag { font-size: 0.42rem; color: #666; font-weight: 800; margin-top: 3px; text-align: center; }
+
+.records-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.75rem; }
+.records-table th, .records-table td { padding: 8px 6px; text-align: left; border-bottom: 1px solid #333; }
+.records-table th { color: var(--brand-gold); border-bottom: 2px solid var(--brand-gold); }

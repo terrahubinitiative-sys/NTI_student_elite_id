@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Official Credential Verification</title>
+    <style>
+        body { font-family: system-ui, sans-serif; background: #eef2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 15px; }
+        .card { background: white; width: 100%; max-width: 380px; border-radius: 16px; padding: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; }
+        .badge { display: inline-block; padding: 6px 14px; border-radius: 20px; font-weight: bold; font-size: 0.8rem; margin-bottom: 15px; }
+        .badge-valid { background: #e6f4ea; color: #137333; border: 1px solid #ceead6; }
+        .badge-invalid { background: #fce8e6; color: #c5221f; border: 1px solid #fad2cf; }
+        .photo-circle { width: 90px; height: 90px; border-radius: 50%; overflow: hidden; margin: 0 auto 15px; border: 3px solid #0077b6; background: #eee; }
+        .photo-circle img { width: 100%; height: 100%; object-fit: cover; }
+        .field { text-align: left; margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+        .label { font-size: 0.65rem; color: #777; text-transform: uppercase; font-weight: 600; }
+        .value { font-size: 0.95rem; font-weight: bold; color: #0f2c59; }
+    </style>
+</head>
+<body>
+
+    <div class="card" id="displayArea">
+        <h2>Verifying Credential...</h2>
+    </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const token = params.get('token');
+        const display = document.getElementById('displayArea');
+
+        if (!token) {
+            display.innerHTML = `<div class="badge badge-invalid">INVALID URL</div><h3>No verification token found.</h3>`;
+        } else {
+            const recordData = localStorage.getItem(`student_${token}`);
+            if (recordData) {
+                const student = JSON.parse(recordData);
+                display.innerHTML = `
+                    <div class="badge badge-valid">✓ OFFICIAL VERIFIED STUDENT</div>
+                    <div class="photo-circle"><img src="${student.photo || ''}" alt="Photo"></div>
+                    <h2 style="margin:0 0 15px 0; color:#0f2c59;">${student.name}</h2>
+                    <div class="field"><div class="label">Institution</div><div class="value">${student.school}</div></div>
+                    <div class="field"><div class="label">Program</div><div class="value">${student.program}</div></div>
+                    <div class="field"><div class="label">Student ID</div><div class="value">${student.id}</div></div>
+                    <div class="field"><div class="label">Valid Through</div><div class="value">${student.valid}</div></div>
+                `;
+            } else {
+                display.innerHTML = `<div class="badge badge-invalid">UNVERIFIED RECORD</div><h3>This credential token is invalid or expired.</h3>`;
+            }
+        }
+    </script>
+</body>
+</html>
